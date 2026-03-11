@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   }
 
   // Configuración del correo
-  $adminEmails = "Alejandragamezz@gmail.com, jorgegonzalezmejia@gmail.com";
+  $adminEmails = "jorgegonzalezmejia@gmail.com";
 
   // Si es una cotización, enviar también copia al cliente
   $destinatarios = ($source === 'Quote Calculator') ? "$adminEmails, $email" : $adminEmails;
