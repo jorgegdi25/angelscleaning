@@ -21,7 +21,7 @@ const Navbar = () => {
                         <Link className="text-charcoal hover:text-primary px-3 py-2 rounded-md text-sm font-semibold transition-colors" to="/contact">Contact</Link>
                     </nav>
                     <div className="hidden md:flex items-center">
-                        <Link className="bg-primary text-white hover:bg-[#0096b4] px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/30" to="/contact">Get a Free Quote</Link>
+                        <Link className="bg-primary text-white hover:bg-[#0096b4] px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/30" to="/quote">Get a Free Quote</Link>
                     </div>
                     <div className="md:hidden flex items-center">
                         <button
@@ -43,7 +43,7 @@ const Navbar = () => {
                         <Link to="/blog" className="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-primary hover:bg-sky-pale" onClick={() => setIsOpen(false)}>Blog</Link>
                         <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-primary hover:bg-sky-pale" onClick={() => setIsOpen(false)}>About Us</Link>
                         <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:text-primary hover:bg-sky-pale" onClick={() => setIsOpen(false)}>Contact</Link>
-                        <Link to="/contact" className="block mt-4 text-center bg-primary text-white hover:bg-[#0096b4] px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/30" onClick={() => setIsOpen(false)}>Get a Free Quote</Link>
+                        <Link to="/quote" className="block mt-4 text-center bg-primary text-white hover:bg-[#0096b4] px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/30" onClick={() => setIsOpen(false)}>Get a Free Quote</Link>
                     </div>
                 </div>
             )}

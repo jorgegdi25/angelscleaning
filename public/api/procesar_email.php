@@ -6,44 +6,59 @@ header("Content-Type: application/json; charset=UTF-8");
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
+  http_response_code(200);
+  exit;
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    
-    // Recibir datos JSON desde React (fetch)
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
 
-    // Sanitizar datos y asignar a variables
-    $nombre = strip_tags(trim($data["name"] ?? ''));
-    $telefono = strip_tags(trim($data["phone"] ?? ''));
-    $email = filter_var(trim($data["email"] ?? ''), FILTER_SANITIZE_EMAIL);
-    $servicio = strip_tags(trim($data["service"] ?? ''));
-    $metros = strip_tags(trim($data["sqft"] ?? ''));
-    $fecha = strip_tags(trim($data["date"] ?? 'No especificada'));
-    $mensaje = strip_tags(trim($data["message"] ?? ''));
+  // Recibir datos JSON desde React (fetch)
+  $json = file_get_contents('php://input');
+  $data = json_decode($json, true);
 
-    // Validar requeridos
-    if (empty($nombre) || empty($telefono) || empty($email) || empty($servicio)) {
-        http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Please complete all required fields."]);
-        exit;
-    }
+  // Identificar la fuente (Contact Form vs Quote Calculator)
+  $source = strip_tags(trim($data["source"] ?? 'Contact Form'));
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Invalid email address."]);
-        exit;
-    }
+  // Sanitizar datos comunes
+  $nombre = strip_tags(trim($data["name"] ?? $data["customerName"] ?? ''));
+  $telefono = strip_tags(trim($data["phone"] ?? $data["customerPhone"] ?? ''));
+  $email = filter_var(trim($data["email"] ?? $data["customerEmail"] ?? ''), FILTER_SANITIZE_EMAIL);
 
-    // Configuración del correo
-    $destinatarios = "Alejandragamezz@gmail.com, jorgegonzalezmejia@gmail.com";
-    $asunto = "Nueva Solicitud de Estimado: $servicio - $nombre";
+  // Datos específicos del formulario
+  $servicio = strip_tags(trim($data["service"] ?? $data["serviceType"] ?? ''));
+  $metros = strip_tags(trim($data["sqft"] ?? ''));
+  $fecha = strip_tags(trim($data["date"] ?? 'No especificada'));
+  $mensaje = strip_tags(trim($data["message"] ?? ''));
 
-    // Plantilla HTML profesional del correo
-    $contenido_email = "
+  // Datos específicos del cotizador
+  $totalPrice = strip_tags(trim($data["totalPrice"] ?? ''));
+  $pdfBase64 = $data["pdfAttachment"] ?? null;
+
+  // Validar requeridos
+  if (empty($nombre) || empty($telefono) || empty($email) || empty($servicio)) {
+    http_response_code(400);
+    echo json_encode(["status" => "error", "message" => "Please complete all required fields."]);
+    exit;
+  }
+
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode(["status" => "error", "message" => "Invalid email address."]);
+    exit;
+  }
+
+  // Configuración del correo
+  $adminEmails = "Alejandragamezz@gmail.com, jorgegonzalezmejia@gmail.com";
+
+  // Si es una cotización, enviar también copia al cliente
+  $destinatarios = ($source === 'Quote Calculator') ? "$adminEmails, $email" : $adminEmails;
+
+  $asunto = ($source === 'Quote Calculator')
+    ? "Tu Cotización de Angels Cleaning Services - $nombre"
+    : "Nueva Solicitud Web: $servicio - $nombre";
+
+  // Plantilla HTML profesional del correo
+  $htmlContent = "
     <html>
     <head>
       <style>
@@ -56,53 +71,92 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         td { padding: 10px; border-bottom: 1px solid #ddd; }
         .label { font-weight: bold; width: 35%; color: #003E7C; }
         .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #888; }
+        .price-badge { display: inline-block; background-color: #0097DB; color: white; padding: 10px 20px; border-radius: 5px; font-size: 20px; font-weight: bold; margin-top: 15px; }
       </style>
     </head>
     <body>
       <div class='container'>
         <div class='header'>
-          <h1>Nueva Solicitud de Servicio</h1>
+          <h1>" . ($source === 'Quote Calculator' ? "Nuevo Estimado de Limpieza" : "Nueva Solicitud de Servicio") . "</h1>
           <p>Angels Cleaning Services</p>
         </div>
         <div class='content'>
-          <p>Hola Equipo,</p>
-          <p>Han recibido una nueva solicitud de estimado desde la página web. Aquí están los detalles:</p>
+          <p>Hola,</p>
+          <p>Aquí están los detalles generados desde la página web ($source):</p>
           <table>
-            <tr><td class='label'>Nombre del Cliente:</td><td>$nombre</td></tr>
+            <tr><td class='label'>Cliente:</td><td>$nombre</td></tr>
             <tr><td class='label'>Teléfono:</td><td>$telefono</td></tr>
             <tr><td class='label'>Correo Electrónico:</td><td>$email</td></tr>
             <tr><td class='label'>Tipo de Servicio:</td><td>$servicio</td></tr>
-            <tr><td class='label'>Tamaño Aproximado:</td><td>$metros</td></tr>
-            <tr><td class='label'>Fecha Preferida:</td><td>$fecha</td></tr>
-            <tr><td class='label'>Detalles Adicionales:</td><td>$mensaje</td></tr>
-          </table>
-          <p style='margin-top: 20px;'><strong>Nota:</strong> El usuario ya ha sido redirigido a la pantalla de pago seguro (Bizum/IBAN).</p>
+            <tr><td class='label'>Tamaño Aproximado:</td><td>$metros sqft</td></tr>
+            <tr><td class='label'>Fecha Preferida:</td><td>$fecha</td></tr>";
+
+  if ($mensaje) {
+    $htmlContent .= "<tr><td class='label'>Detalles:</td><td>$mensaje</td></tr>";
+  }
+
+  $htmlContent .= "
+          </table>";
+
+  if ($source === 'Quote Calculator') {
+    $htmlContent .= "<div style='text-align: center;'><div class='price-badge'>Total Estimado: $$totalPrice USD</div><p style='margin-top:15px'>Encuentra el PDF detallado adjunto a este correo.</p></div>";
+  }
+
+  $htmlContent .= "
         </div>
         <div class='footer'>
-          <p>Este mensaje fue generado automáticamente por el sistema web de Angels Cleaning App.</p>
+          <p>Este mensaje fue generado automáticamente por Angels Cleaning App.</p>
         </div>
       </div>
     </body>
     </html>
     ";
 
-    // Cabeceras para enviar HTML
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= "From: $nombre <$email>" . "\r\n";
-    $headers .= "Reply-To: $email" . "\r\n";
+  // Generar un límite único para el correo multipart
+  $boundary = md5(time());
 
-    // Intentar Enviar
-    if (mail($destinatarios, $asunto, $contenido_email, $headers)) {
-        http_response_code(200);
-        echo json_encode(["status" => "success", "message" => "Request sent successfully."]);
-    } else {
-        http_response_code(500);
-        echo json_encode(["status" => "error", "message" => "Failed to send email on server."]);
-    }
+  // Cabeceras principales
+  $headers = "From: Angels Cleaning <noreply@angelscleaningservices.com>\r\n";
+  $headers .= "Reply-To: $email\r\n";
+  $headers .= "MIME-Version: 1.0\r\n";
+
+  if ($pdfBase64) {
+    // Enviar Multipart (HTML + Archivo Adjunto)
+    $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+
+    // Cuerpo del mensaje multipart
+    $message = "--$boundary\r\n";
+    $message .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+    $message .= $htmlContent . "\r\n\r\n";
+
+    // Adjuntar PDF
+    $message .= "--$boundary\r\n";
+    $message .= "Content-Type: application/pdf; name=\"Cotizacion_Angels_Cleaning.pdf\"\r\n";
+    $message .= "Content-Transfer-Encoding: base64\r\n";
+    $message .= "Content-Disposition: attachment; filename=\"Cotizacion_Angels_Cleaning.pdf\"\r\n\r\n";
+
+    // Insertar el base64 respetando los saltos de línea requeridos por el estándar MIME
+    $message .= chunk_split($pdfBase64) . "\r\n\r\n";
+    $message .= "--$boundary--";
+
+  } else {
+    // Enviar solo HTML (Comportamiento Original)
+    $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+    $message = $htmlContent;
+  }
+
+  // Intentar Enviar
+  if (mail($destinatarios, $asunto, $message, $headers)) {
+    http_response_code(200);
+    echo json_encode(["status" => "success", "message" => "Request sent successfully."]);
+  } else {
+    http_response_code(500);
+    echo json_encode(["status" => "error", "message" => "Failed to send email on server."]);
+  }
 
 } else {
-    http_response_code(403);
-    echo json_encode(["status" => "error", "message" => "Invalid request method."]);
+  http_response_code(403);
+  echo json_encode(["status" => "error", "message" => "Invalid request method."]);
 }
 ?>

@@ -7,6 +7,7 @@ import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import QuoteCalculator from './pages/QuoteCalculator';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/quote" element={<QuoteCalculator />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
