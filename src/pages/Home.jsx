@@ -30,10 +30,10 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Angels Cleaning Services | Sparkling Clean Homes</title>
+        <title>Angels Cleaning Services | Professional Cleaning in South Florida</title>
         <meta
           name="description"
-          content="Experience the heavenly touch of professional cleaning in Delray Beach and Boca Raton. We offer residential, commercial, move-in/out, and deep cleaning services."
+          content="Top-quality professional cleaning services in Delray Beach, Boca Raton, and throughout South Florida. Residential, commercial, and move-in/out cleaning."
         />
       </Helmet>
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-navy">
@@ -63,12 +63,11 @@ const Home = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <h1 className="text-5xl md:text-6xl lg:text-8xl font-black tracking-tight text-white mb-8 leading-[0.95] drop-shadow-2xl">
-              Sparkling Clean <br />
-              <span className="text-sky-400 italic font-serif">Angelic Service.</span>
+              Sparkling Clean. <br />
+              <span className="text-sky-400 italic font-serif">Professional Perfection.</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-lg">
-              Experience the heavenly touch of professional cleaning in South Florida. We bring
-              purity and peace to your home.
+              Reliable, professional, and committed to delivering spotless results for your home or business in South Florida.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Link
