@@ -507,103 +507,104 @@ const Home = () => {
             {...fadeUp}
           >
             <h2 className="text-primary font-bold tracking-widest uppercase text-xs mb-3 border-b border-primary/20 inline-block pb-1">
-              Testimonials
+              Google Reviews
             </h2>
             <h3 className="text-3xl md:text-4xl font-bold text-navy mb-4">
               What Our Clients Say
             </h3>
             <p className="text-charcoal/80">
-              Join hundreds of happy families and businesses who trust us with
-              their cleaning needs.
+              Real feedback from our satisfied customers in South Florida.
             </p>
           </motion.div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
             <motion.div
-              className="bg-white p-10 rounded-3xl border border-white shadow-xl relative"
+              className="bg-white p-10 rounded-3xl border border-white shadow-xl relative flex flex-col"
               {...fadeUp}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8">
                 format_quote
               </span>
-              <div className="flex text-primary mb-6">
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
+              <div className="flex text-yellow-400 mb-6">
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
               </div>
-              <p className="text-charcoal italic mb-10 leading-relaxed text-lg">
-                "The team at Angels is truly professional. My house has never
-                looked so clean! Their attention to detail is remarkable and I
-                love their eco-friendly products."
+              <p className="text-charcoal italic mb-10 leading-relaxed text-lg flex-grow">
+                "Incredible attention to detail, my house had never been so clean. Totally recommended!"
               </p>
-              <div className="flex items-center mt-auto border-t border-sky-pale pt-6">
+              <div className="flex items-center border-t border-sky-pale pt-6">
                 <div>
-                  <h5 className="font-bold text-navy text-lg">Sarah Johnson</h5>
-                  <p className="text-sm text-primary font-medium">Homeowner</p>
+                  <h5 className="font-bold text-navy text-lg">Jessica Ramírez</h5>
+                  <p className="text-sm text-primary font-medium">Google Review</p>
                 </div>
               </div>
             </motion.div>
             <motion.div
-              className="bg-white p-10 rounded-3xl border border-white shadow-xl relative"
+              className="bg-white p-10 rounded-3xl border border-white shadow-xl relative flex flex-col"
               {...fadeUp}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8">
                 format_quote
               </span>
-              <div className="flex text-primary mb-6">
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
+              <div className="flex text-yellow-400 mb-6">
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
               </div>
-              <p className="text-charcoal italic mb-10 leading-relaxed text-lg">
-                "Switching to Angels Cleaning for our office was the best
-                decision. Reliable, consistent, and always going above and
-                beyond. Highly recommended!"
+              <p className="text-charcoal italic mb-10 leading-relaxed text-lg flex-grow">
+                "The moving service was impeccable. They saved us a lot of stress. Very professional and friendly."
               </p>
-              <div className="flex items-center mt-auto border-t border-sky-pale pt-6">
+              <div className="flex items-center border-t border-sky-pale pt-6">
                 <div>
-                  <h5 className="font-bold text-navy text-lg">Michael Ross</h5>
-                  <p className="text-sm text-primary font-medium">
-                    Business Owner
-                  </p>
+                  <h5 className="font-bold text-navy text-lg">Michael Torres</h5>
+                  <p className="text-sm text-primary font-medium">Google Review</p>
                 </div>
               </div>
             </motion.div>
             <motion.div
-              className="bg-white p-10 rounded-3xl border border-white shadow-xl relative"
+              className="bg-white p-10 rounded-3xl border border-white shadow-xl relative flex flex-col"
               {...fadeUp}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8">
                 format_quote
               </span>
-              <div className="flex text-primary mb-6">
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
-                <span className="material-symbols-outlined fill-1">star</span>
+              <div className="flex text-yellow-400 mb-6">
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
+                <span className="material-icons">star</span>
               </div>
-              <p className="text-charcoal italic mb-10 leading-relaxed text-lg">
-                "Their deep cleaning service is unmatched. They found and
-                cleaned spots I hadn't even thought of. Truly angelic service
-                for a busy parent like me."
+              <p className="text-charcoal italic mb-10 leading-relaxed text-lg flex-grow">
+                "The cleaning angels always do good work! I highly recommend them for your cleaning needs. They show up on time & exceed expectations!"
               </p>
-              <div className="flex items-center mt-auto border-t border-sky-pale pt-6">
+              <div className="flex items-center border-t border-sky-pale pt-6">
                 <div>
-                  <h5 className="font-bold text-navy text-lg">Emily Davis</h5>
-                  <p className="text-sm text-primary font-medium">
-                    Happy Client
-                  </p>
+                  <h5 className="font-bold text-navy text-lg">Lachette Holden</h5>
+                  <p className="text-sm text-primary font-medium">Google Review</p>
                 </div>
               </div>
             </motion.div>
           </div>
+
+          <motion.div className="text-center" {...fadeUp} transition={{ delay: 0.4 }}>
+            <a 
+              href="https://www.google.com/maps/place/Angels+Cleaning+Services/@26.4465375,-80.1103049,10z/data=!4m6!3m5!1s0x2624025a13485b29:0xb7d2d80220ea3de8!8m2!3d26.4465376!4d-80.110305!16s%2Fg%2F11xdd87clx?utm_campaign=ml-ardi-ahc_2025&g_ep=Eg1tbF8yMDI2MDMwNF8wIOC7DCoASAJQAQ%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center bg-white text-navy font-bold px-8 py-4 rounded-2xl shadow-lg border border-sky-light hover:bg-sky-pale transition-all hover:-translate-y-1"
+            >
+              <img src="/images/google-logo.png" alt="Google" className="w-6 h-6 mr-3" />
+              VIEW ALL REVIEWS ON GOOGLE MAPS
+            </a>
+          </motion.div>
         </div>
       </section>
 
