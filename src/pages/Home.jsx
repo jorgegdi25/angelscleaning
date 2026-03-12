@@ -533,11 +533,11 @@ const Home = () => {
                 <span className="material-icons">star</span>
               </div>
               <p className="text-charcoal italic mb-10 leading-relaxed text-lg flex-grow">
-                "Incredible attention to detail, my house had never been so clean. Totally recommended!"
+                "My house hasn’t been this clean in months. She did a great job and recommend her to others who want a great job done."
               </p>
               <div className="flex items-center border-t border-sky-pale pt-6">
                 <div>
-                  <h5 className="font-bold text-navy text-lg">Jessica Ramírez</h5>
+                  <h5 className="font-bold text-navy text-lg">Harriet Sulsky</h5>
                   <p className="text-sm text-primary font-medium">Google Review</p>
                 </div>
               </div>
@@ -558,11 +558,11 @@ const Home = () => {
                 <span className="material-icons">star</span>
               </div>
               <p className="text-charcoal italic mb-10 leading-relaxed text-lg flex-grow">
-                "The moving service was impeccable. They saved us a lot of stress. Very professional and friendly."
+                "Hi Jaky, I was just about to give your name to my neighbor when your text came in. Her name is Harriet and I will be giving her your number. Thanks for doing a great job."
               </p>
               <div className="flex items-center border-t border-sky-pale pt-6">
                 <div>
-                  <h5 className="font-bold text-navy text-lg">Michael Torres</h5>
+                  <h5 className="font-bold text-navy text-lg">Jon Garberg</h5>
                   <p className="text-sm text-primary font-medium">Google Review</p>
                 </div>
               </div>
@@ -583,11 +583,11 @@ const Home = () => {
                 <span className="material-icons">star</span>
               </div>
               <p className="text-charcoal italic mb-10 leading-relaxed text-lg flex-grow">
-                "The cleaning angels always do good work! I highly recommend them for your cleaning needs. They show up on time & exceed expectations!"
+                "Meticulous to the very last detail. Why choose any other cleaning service!!"
               </p>
               <div className="flex items-center border-t border-sky-pale pt-6">
                 <div>
-                  <h5 className="font-bold text-navy text-lg">Lachette Holden</h5>
+                  <h5 className="font-bold text-navy text-lg">MrPetrello</h5>
                   <p className="text-sm text-primary font-medium">Google Review</p>
                 </div>
               </div>
