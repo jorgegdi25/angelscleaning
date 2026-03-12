@@ -292,7 +292,7 @@ const Home = () => {
                 Enjoy Your Home
               </h4>
               <p className="text-charcoal/60 text-sm leading-relaxed">
-                Relax and enjoy your sparkling clean, angelic home.
+                Relax and enjoy your sparkling clean, immaculate home.
               </p>
             </motion.div>
           </div>
@@ -332,7 +332,7 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <h2 className="text-primary font-bold tracking-widest uppercase text-xs mb-3 border-b border-primary/20 inline-block pb-1">
-                Why Choose Angels
+                Why Choose Us
               </h2>
               <h3 className="text-3xl md:text-5xl font-bold text-navy mb-8 leading-tight">
                 Trustworthy &amp; Reliable Cleaning Professionals
@@ -705,8 +705,8 @@ const Home = () => {
             {...fadeUp}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Get a free, no-obligation quote today and let the Angels work their
-            magic.
+            Get a free, no-obligation quote today and let our experts transform
+            your space.
           </motion.p>
           <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.2 }}>
             <Link
