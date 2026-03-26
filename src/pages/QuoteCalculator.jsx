@@ -310,7 +310,10 @@ const QuoteCalculator = () => {
             });
             
             if (img.complete && img.naturalWidth > 0) {
-                doc.addImage(img, 'PNG', 14, 10, 40, 40, undefined, 'FAST');
+                const imgWidth = 45;
+                const aspectRatio = img.naturalHeight / img.naturalWidth;
+                const imgHeight = imgWidth * aspectRatio;
+                doc.addImage(img, 'PNG', 14, 10, imgWidth, imgHeight, undefined, 'FAST');
             }
         } catch (e) {
             console.error("Could not load logo for PDF", e);
