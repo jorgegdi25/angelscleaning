@@ -1,18 +1,128 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import logoUrl from '/logo-angels-c.png'; // Make sure this path corresponds to your actual logo
+import logoUrl from '/logo-angels-c.png';
 
+const serviceDetails = {
+    'Standard Cleaning': {
+        included: [
+            { area: 'Living Areas', tasks: '• Dusting accessible surfaces\n• Cleaning tables and furniture surfaces\n• Cleaning mirrors\n• Light dusting of ceiling fans\n• Vacuuming carpets and rugs\n• Sweeping and mopping floors\n• Emptying trash bins' },
+            { area: 'Kitchen', tasks: '• Cleaning and sanitizing countertops\n• Cleaning sink and faucet\n• Cleaning exterior of appliances\n• Cleaning exterior of cabinets\n• Cleaning stovetop surface\n• Cleaning backsplash\n• Sweeping and mopping floors\n• Taking out trash' },
+            { area: 'Bathrooms', tasks: '• Cleaning and sanitizing sink and countertops\n• Cleaning mirrors\n• Cleaning toilet (inside and outside)\n• Light cleaning of shower or bathtub\n• Cleaning shower glass doors\n• Sweeping and mopping floors\n• Emptying trash bins' },
+            { area: 'Bedrooms', tasks: '• Dusting furniture surfaces\n• Cleaning nightstands\n• Vacuuming carpets and rugs\n• Sweeping and mopping floors\n• Emptying trash bins' }
+        ],
+        notIncluded: [
+            { id: 'bedSheet', text: '• Changing bed linens' },
+            { id: 'fridge', text: '• Cleaning inside refrigerator' },
+            { id: 'oven', text: '• Cleaning inside oven' },
+            { id: 'cabinets', text: '• Cleaning inside cabinets or closets' },
+            { id: 'dishwasher', text: '• Cleaning inside dishwasher' },
+            { id: 'baseboards', text: '• Deep cleaning baseboards' },
+            { id: 'windows', text: '• Window cleaning or window tracks' },
+            { id: 'blinds', text: '• Cleaning blinds' },
+            { id: 'ceilingFans', text: '• Deep cleaning ceiling fans' },
+            { id: 'airVents', text: '• Cleaning air vents' },
+            { id: 'heavyFurniture', text: '• Moving heavy furniture' },
+            { id: 'wall', text: '• Wall washing' },
+            { id: 'postConst', text: '• Post-construction cleaning' },
+            { id: 'mold', text: '• Mold removal or severe stain removal' },
+            { id: 'laundry', text: '• Laundry or dishwashing' },
+            { id: 'patio', text: '• Exterior area cleaning' }
+        ]
+    },
+    'Deep Cleaning': {
+        included: [
+            { area: 'Living Areas', tasks: '• Dusting accessible surfaces\n• Cleaning tables & mirrors\n• Vacuuming/mopping floors\n• Detailed cleaning of baseboards\n• Cleaning door frames\n• Cleaning window frames\n• Cleaning blinds\n• Detailed cleaning of ceiling fans' },
+            { area: 'Kitchen', tasks: '• Detailed exterior cabinet cleaning\n• Cleaning top of cabinets\n• Deep cleaning of stovetop & burners\n• Cleaning inside microwave\n• Removal of grease buildup\n• Detailed cleaning of cabinet handles' },
+            { area: 'Bathrooms', tasks: '• Removal of soap scum\n• Deep cleaning of tiles & grout\n• Removal of hard water stains\n• Detailed cleaning of shower glass doors\n• Cleaning behind toilet\n• Cleaning sinks, countertops, & faucets' },
+            { area: 'Bedrooms', tasks: '• Detailed cleaning of baseboards\n• Cleaning blinds\n• Cleaning door & window frames\n• Vacuuming/mopping floors' }
+        ],
+        notIncluded: [
+            { id: 'dishwashing', text: '• Dishwashing' },
+            { id: 'bedSheet', text: '• Bed making' },
+            { id: 'fridge', text: '• Cleaning inside refrigerator' },
+            { id: 'oven', text: '• Cleaning inside oven' },
+            { id: 'cabinets', text: '• Cleaning inside cabinets or closets' },
+            { id: 'wall', text: '• Wall washing' },
+            { id: 'windows', text: '• Exterior window cleaning' },
+            { id: 'carpet', text: '• Carpet shampooing or machine carpet cleaning' },
+            { id: 'upholstery', text: '• Upholstery cleaning' },
+            { id: 'biohazard', text: '• Severe mold removal / Biohazard cleaning' },
+            { id: 'garage', text: '• Garage cleaning' },
+            { id: 'patio', text: '• Exterior area cleaning' },
+            { id: 'postConst', text: '• Heavy post-construction cleaning' }
+        ]
+    },
+    'Move Out/ Move in Cleaning': {
+        included: [
+            { area: 'Common Areas & Bedrooms', tasks: '• Deep cleaning of closets and cabinets inside\n• Cleaning interior of drawers and shelves\n• Detailed cleaning of doors and frames\n• Cleaning interior of windows\n• Cleaning blinds\n• Deep cleaning baseboards & ceiling fans' },
+            { area: 'Kitchen', tasks: '• Cleaning inside cabinets and drawers\n• Cleaning inside refrigerator\n• Cleaning inside oven & microwave\n• Detailed cleaning of stovetop and burners\n• Deep cleaning of backsplash\n• Removal of grease buildup' },
+            { area: 'Bathrooms', tasks: '• Deep cleaning of tiles and grout\n• Removal of soap scum/hard water stains\n• Deep cleaning of shower glass doors\n• Cleaning behind and around the toilet\n• Cleaning sinks, countertops, & faucets\n• Cleaning bathroom accessories' },
+            { area: 'Floors & General', tasks: '• Sweeping, vacuuming, and mopping all floors\n• Emptying trash bins' }
+        ],
+        notIncluded: [
+            { id: 'furniture', text: '• Collection of furniture or belongings' },
+            { id: 'wall', text: '• Cleaning exterior walls or painting' },
+            { id: 'windows', text: '• Exterior window cleaning' },
+            { id: 'patio', text: '• Cleaning outdoor areas (yard/patio)' },
+            { id: 'garage', text: '• Garage cleaning' },
+            { id: 'biohazard', text: '• Severe mold or biohazard cleaning' }
+        ]
+    },
+    'Commercial Cleaning - Standard': {
+        included: [
+            { area: 'Common Areas', tasks: '• Dusting desks, tables, accessible furniture\n• Cleaning interior mirrors and glass surfaces\n• Disinfecting light switches and door handles\n• Light dusting of ceiling fans\n• Sweeping, vacuuming, & mopping floors\n• Emptying trash bins' },
+            { area: 'Reception', tasks: '• Cleaning furniture and surfaces\n• Cleaning counters and reception desks\n• Cleaning coffee tables' },
+            { area: 'Offices', tasks: '• Cleaning desks and worktables\n• Dusting furniture tops\n• Vacuuming carpets & rugs\n• Sweeping and mopping floors' },
+            { area: 'Bathrooms/Kitchen', tasks: '• Disinfecting sinks, countertops, & toilets\n• Sweeping and mopping floors\n• Restocking soap and paper towels (if applicable)\n• Emptying trash' }
+        ],
+        notIncluded: [
+            { id: 'cabinets', text: '• Cleaning inside cabinets or files' },
+            { id: 'carpet', text: '• Deep carpet or upholstery cleaning' },
+            { id: 'windows', text: '• Exterior window cleaning' },
+            { id: 'patio', text: '• Outdoor area cleaning (patios, parking lots)' },
+            { id: 'heavyFurniture', text: '• Moving heavy furniture' },
+            { id: 'dishwashing', text: '• Washing dishes or personal utensils' },
+            { id: 'biohazard', text: '• Severe mold or biohazard cleaning' }
+        ]
+    },
+    'Post construction': {
+        included: [
+            { area: 'General Areas', tasks: '• Removal of construction dust from all surfaces\n• Window cleaning (interior)\n• Vacuuming carpets/rugs\n• Sweeping & mopping hard floors\n• Wiping baseboards & door frames' },
+            { area: 'Kitchen & Bathrooms', tasks: '• Disinfecting sinks, tubs, and toilets\n• Cleaning exterior of cabinets and appliances\n• Removing light paint splatters or tape residue (if safe)' }
+        ],
+        notIncluded: [
+            { id: 'debris', text: '• Heavy debris removal (wood, bricks, etc.)' },
+            { id: 'exterior', text: '• Exterior pressure washing' },
+            { id: 'windows', text: '• Exterior window cleaning (unless ground floor)' },
+            { id: 'paint', text: '• Extensive paint removal from floors or glass' }
+        ]
+    }
+};
 
+const extrasList = [
+    { id: 'oven', label: 'Inside Oven ($35)' },
+    { id: 'fridge', label: 'Inside Refrigerator (Empty) ($32)' },
+    { id: 'cabinets', label: 'Inside Cabinets (Empty) ($40)' },
+    { id: 'baseboards', label: 'Deep Baseboards ($45)' },
+    { id: 'windows', label: 'Windows (Int/Ext) ($10 ea.)', isCounter: true },
+    { id: 'patio', label: 'Patio/Balcony ($50)' },
+    { id: 'wall', label: 'Wall Washing ($80)' },
+    { id: 'bedSheet', label: 'Bed Sheet Change ($15)' },
+];
 
 const QuoteCalculator = () => {
     const [form, setForm] = useState({
-        serviceType: 'Standard cleaning', 
+        serviceType: 'Standard Cleaning', 
         frequency: 'One-time',           
-        sqft: 0, // Initially unselected
-        condition: 'Light cleaning',     
+        serviceDate: '',
+        hasPets: false,
+        sqft: 0, 
+        bedrooms: 1,
+        fullBathrooms: 1,
+        halfBathrooms: 0,
         windowsCount: 0,                 
         extras: [],                      
         customerName: '',
@@ -20,18 +130,44 @@ const QuoteCalculator = () => {
         customerPhone: '',
         customerAddress: '',
         city: 'Boca Raton',
-        message: ''
+        message: '',
+        referenceImages: [],
+        acceptTerms: false,
+        acceptQualityPolicy: false,
+        intent: 'quote',
+        isUrgent: false
     });
 
     const [hasInteracted, setHasInteracted] = useState(false);
-    const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
+    const [estimatedPrice, setEstimatedPrice] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
     const [cityError, setCityError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    
+    // Multi-step form state
+    const [step, setStep] = useState(1);
+    const totalSteps = 4;
 
-    // Calculation Logic from Document
+    const nextStep = () => {
+        if (step === 1 && cityError) return;
+        setStep(prev => Math.min(prev + 1, totalSteps));
+        
+        if (window.innerWidth < 1024) {
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+    };
+
+    const prevStep = () => {
+        setStep(prev => Math.max(prev - 1, 1));
+        
+        if (window.innerWidth < 1024) {
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+    };
+
+    // Calculation Logic
     useEffect(() => {
-        // 1. Base Price by Sqft
         let basePrice = 120;
         if (form.sqft < 1000) basePrice = 120;
         else if (form.sqft <= 1500) basePrice = 150;
@@ -40,26 +176,24 @@ const QuoteCalculator = () => {
         else if (form.sqft <= 3000) basePrice = 240;
         else basePrice = 280;
 
-        // 2. Cleaning Type Multiplier
         let serviceMultiplier = 1.0;
-        if (form.serviceType === 'Deep cleaning') serviceMultiplier = 1.5;
-        if (form.serviceType === 'Move in / Move out') serviceMultiplier = 1.8;
+        if (form.serviceType === 'Deep Cleaning' || form.serviceType === 'Commercial Cleaning - Standard') serviceMultiplier = 1.5;
+        if (form.serviceType === 'Move Out/ Move in Cleaning') serviceMultiplier = 1.8;
         if (form.serviceType === 'Post construction') serviceMultiplier = 2.2;
 
-        // 3. Home Condition Adjustment
         let conditionMultiplier = 1.0;
-        if (form.condition === 'Average condition') conditionMultiplier = 1.10;
-        if (form.condition === 'Heavy buildup') conditionMultiplier = 1.25;
+        // Pets adjustment +10%
+        if (form.hasPets) {
+            conditionMultiplier += 0.10; 
+        }
 
-        // Core calculation
         let calculatedBase = basePrice * serviceMultiplier * conditionMultiplier;
 
-        // 4. Extras
         const extrasPricing = {
-            oven: 35, // Avg of $25-$45
-            fridge: 32, // Avg of $25-$40
+            oven: 35, 
+            fridge: 32, 
             cabinets: 40,
-            baseboards: 45, // Avg of $30-$60
+            baseboards: 45, 
             patio: 50,
             wall: 80,
             bedSheet: 15
@@ -70,33 +204,26 @@ const QuoteCalculator = () => {
             if (extrasPricing[ext]) extrasTotal += extrasPricing[ext];
         });
 
-        // 5. Windows
+        // Windows
         let windowsTotal = form.windowsCount * 10;
+        let extraBedroomsPrice = Math.max(0, form.bedrooms - 4) * 20;
+        let totalBathUnits = form.fullBathrooms + (form.halfBathrooms * 0.5);
+        let extraBathPrice = Math.max(0, totalBathUnits - 4) * 20;
 
-        // Total
-        let totalPrice = calculatedBase + extrasTotal + windowsTotal;
+        // Urgency Fee
+        let urgencyFee = form.isUrgent ? 50 : 0;
 
-        // Apply Frequency Discount
+        let totalPrice = calculatedBase + extrasTotal + windowsTotal + extraBedroomsPrice + extraBathPrice + urgencyFee;
+
         if (form.frequency === 'Weekly') totalPrice *= 0.80;
         if (form.frequency === 'Bi-weekly') totalPrice *= 0.85;
-        // Monthly or One-time = 1.0 (No discount)
 
-        // 6. Range Calculation
-        let minPrice = totalPrice * 0.90;
-        let maxPrice = totalPrice * 1.10;
-
-        // Never below $120
-        if (minPrice < 120) {
-            minPrice = 120;
-            if (maxPrice < 140) maxPrice = 140; // Ensure logical range
+        if (totalPrice < 120) {
+            totalPrice = 120;
         }
 
-        setPriceRange({
-            min: Math.round(minPrice),
-            max: Math.round(maxPrice)
-        });
+        setEstimatedPrice(Math.round(totalPrice));
 
-        // Validate City Real-time
         if (form.city === 'Other') {
             setCityError('Thank you for your inquiry, but at the moment we only serve Boca Raton, Boynton Beach, and Delray Beach.');
         } else {
@@ -109,12 +236,16 @@ const QuoteCalculator = () => {
         setHasInteracted(true);
         const { name, value, type, checked } = e.target;
         if (type === 'checkbox') {
-            setForm(prev => ({
-                ...prev,
-                extras: checked
-                    ? [...prev.extras, value]
-                    : prev.extras.filter(ext => ext !== value)
-            }));
+            if (name === 'extras') {
+                setForm(prev => ({
+                    ...prev,
+                    extras: checked
+                        ? [...prev.extras, value]
+                        : prev.extras.filter(ext => ext !== value)
+                }));
+            } else {
+                setForm(prev => ({ ...prev, [name]: checked }));
+            }
         } else {
             setForm(prev => ({ 
                 ...prev, 
@@ -123,15 +254,62 @@ const QuoteCalculator = () => {
         }
     };
 
+    const handleWindowChange = (increment) => {
+        setHasInteracted(true);
+        setForm(prev => ({
+            ...prev,
+            windowsCount: Math.max(0, prev.windowsCount + increment)
+        }));
+    };
+
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length + form.referenceImages.length > 2) {
+            alert('You can only upload up to 2 images.');
+            return;
+        }
+        
+        files.forEach(file => {
+            if(file.size > 5 * 1024 * 1024) {
+               alert('File too large. Max 5MB per image.');
+               return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setForm(prev => ({
+                    ...prev,
+                    referenceImages: [...prev.referenceImages, reader.result]
+                }));
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const removeImage = (index) => {
+        setForm(prev => ({
+            ...prev,
+            referenceImages: prev.referenceImages.filter((_, i) => i !== index)
+        }));
+    };
+
     const generatePDFBase64 = async () => {
         const doc = new jsPDF();
-
+        
         try {
+            // Ensure logo is loaded before adding it to PDF to avoid black background issues
             const img = new Image();
             img.src = logoUrl;
-            doc.addImage(img, 'PNG', 14, 10, 40, 40);
+            
+            await new Promise((resolve) => {
+                img.onload = resolve;
+                img.onerror = resolve; // Continue even if load fails to avoid blocking the whole process
+            });
+            
+            if (img.complete && img.naturalWidth > 0) {
+                doc.addImage(img, 'PNG', 14, 10, 40, 40, undefined, 'FAST');
+            }
         } catch (e) {
-            console.log("Could not load logo for PDF", e);
+            console.error("Could not load logo for PDF", e);
         }
 
         doc.setFontSize(22);
@@ -142,7 +320,7 @@ const QuoteCalculator = () => {
         doc.setTextColor(51, 51, 51);
         doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 70);
         doc.text(`Client: ${form.customerName}`, 14, 78);
-        doc.text(`Address: ${form.customerAddress}, City: ${form.city}`, 14, 86);
+        doc.text(`Preferred Date: ${form.intent === 'quote' ? 'Just getting a quote for now' : (form.serviceDate || 'Not specified')}`, 14, 86);
         doc.text(`Phone: ${form.customerPhone} | Email: ${form.customerEmail}`, 14, 94);
 
         autoTable(doc, {
@@ -151,27 +329,29 @@ const QuoteCalculator = () => {
             body: [
                 ['Service Type', form.serviceType],
                 ['Frequency', form.frequency],
-                ['Square Footage (SqFt)', `${form.sqft} sqft`],
-                ['Home Condition', form.condition],
+                ['Intent', form.intent === 'quote' ? 'Just saving quote' : 'Ready to schedule'],
+                ['Preferred Date', form.intent === 'quote' ? 'Not applicable' : (form.serviceDate || 'Not specified')],
+                ['Property Size', `${form.sqft} sqft | ${form.bedrooms} Beds`],
+                ['Bathrooms', `${form.fullBathrooms} Full | ${form.halfBathrooms} Half`],
+                ['Condition', form.hasPets ? 'Pets Home' : 'Standard'],
+                ['Urgency Fee', form.isUrgent ? '$50 (Requested)' : 'No'],
                 ['Windows Count', `${form.windowsCount} (Int/Ext)`],
-                ['Extra Services', form.extras.length > 0 ? form.extras.map(e => extrasList.find(x => x.id === e)?.label).join(', ') : 'None']
+                ['Extra Services', form.extras.length > 0 ? form.extras.map(e => extrasList.find(x => x.id === e)?.label.split(' ($')[0]).join(', ') : 'None']
             ],
             theme: 'striped',
             headStyles: { fillColor: [0, 151, 219] },
         });
 
         const finalY = doc.lastAutoTable.finalY || 150;
-
-        const minPriceDisplay = hasInteracted ? priceRange.min : '0';
-        const maxPriceDisplay = hasInteracted ? priceRange.max : '0';
+        const priceDisplay = hasInteracted ? estimatedPrice : '0';
         
         doc.setFontSize(18);
         doc.setTextColor(0, 62, 124);
-        doc.text(`Estimated Total: $${minPriceDisplay} - $${maxPriceDisplay} USD`, 14, finalY + 20);
+        doc.text(`Estimated Total: ~$${priceDisplay} USD`, 14, finalY + 20);
 
         doc.setFontSize(10);
         doc.setTextColor(100, 100, 100);
-        const disclaimer = "Instant estimates are based on average home conditions. Final price may vary depending on the actual condition of the property. \n\nWe will confirm availability after reviewing your request. Recurring Standard Cleaning prices apply based on the frequency you chose. If visits are skipped or frequency is reduced, the per-visit price will adjust accordingly.";
+        const disclaimer = "Instant estimates are based on average home conditions. Final price may vary depending on the actual condition of the property. The details of the service remain the same, but the quoted cost is an estimate. \n\nWe will confirm availability after reviewing your request. Recurring cleaning prices apply based on the chosen frequency.";
 
         const splitDisclaimer = doc.splitTextToSize(disclaimer, 180);
         doc.text(splitDisclaimer, 14, finalY + 35);
@@ -185,15 +365,33 @@ const QuoteCalculator = () => {
 
         doc.setFontSize(10);
         doc.setTextColor(100, 100, 100);
-        doc.text('The following standard items apply to your quoted service.', 14, 28);
+        doc.text(`The following tasks apply to your selected service (${form.serviceType}):`, 14, 28);
+
+        const serviceTypeData = serviceDetails[form.serviceType] || serviceDetails['Standard Cleaning'];
+        
+        // Remove Extras from Not Included
+        let finalNotIncluded = serviceTypeData.notIncluded.filter(item => {
+            if (item.id === 'windows' && form.windowsCount > 0) return false;
+            if (form.extras.includes(item.id)) return false;
+            return true;
+        });
+
+        // Add requested extras as Included
+        let requestedExtras = [];
+        form.extras.forEach(extraId => {
+            const extraInfo = extrasList.find(e => e.id === extraId);
+            if(extraInfo) requestedExtras.push(`• ${extraInfo.label.split(' ($')[0]}`);
+        });
+        if (form.windowsCount > 0) {
+            requestedExtras.push(`• Interior/Exterior Windows (${form.windowsCount})`);
+        }
 
         autoTable(doc, {
             startY: 35,
             head: [['Area', 'Included Tasks']],
             body: [
-                ['General Areas & Bedrooms', '• Dusting visible surfaces\n• Wiping baseboards (light)\n• Cleaning mirrors\n• Vacuuming carpets/rugs\n• Sweeping & mopping hard floors\n• Ceiling fans (reachable)\n• Emptying trash bins'],
-                ['Bathrooms', '• Toilet cleaning & disinfection\n• Shower & tub cleaning\n• Sink & faucet cleaning\n• Countertop wiping\n• Mirror cleaning\n• Floor cleaning\n• Trash removal'],
-                ['Kitchen', '• Cleaning exterior of appliances (oven, fridge, dishwasher, microwave)\n• Cleaning stovetop surface\n• Wiping countertops\n• Cleaning sink and faucet\n• Wiping cabinet exteriors\n• Trash removal\n• Floor vacuum & mop']
+                ...serviceTypeData.included.map(inc => [inc.area, inc.tasks]),
+                ...(requestedExtras.length > 0 ? [['Added Extras', requestedExtras.join('\n')]] : [])
             ],
             theme: 'grid',
             headStyles: { fillColor: [0, 151, 219] },
@@ -208,7 +406,7 @@ const QuoteCalculator = () => {
             startY: doc.lastAutoTable.finalY + 15,
             head: [['Not Included (Unless requested as Extra)']],
             body: [
-                ['• Inside oven deep cleaning\n• Inside refrigerator/cabinets\n• Removing post-construction debris\n• Wet wiping blinds or washing walls\n• Moving heavy furniture\n• Cleaning areas outside normal reach (requires high ladder)']
+                [finalNotIncluded.map(n => n.text).join('\n')]
             ],
             theme: 'plain',
             headStyles: { fillColor: [220, 53, 69], textColor: 255 },
@@ -223,8 +421,16 @@ const QuoteCalculator = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (cityError) {
-            alert('Cannot submit. Selected city is outside of our service area.');
+        if (step !== totalSteps) {
+            nextStep();
+            return;
+        }
+        
+        if (cityError || !form.acceptTerms || !form.acceptQualityPolicy || (form.intent === 'schedule' && !form.serviceDate)) {
+            if (cityError) alert('Cannot submit. Selected city is outside of our service area.');
+            else if (!form.acceptTerms) alert('Please accept the estimate terms to proceed.');
+            else if (!form.acceptQualityPolicy) alert('Please accept our Quality Policy to proceed.');
+            else alert('Please select a desired service date to schedule.');
             return;
         }
 
@@ -239,7 +445,7 @@ const QuoteCalculator = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...form,
-                    totalPrice: `${priceRange.min} - ${priceRange.max}`,
+                    totalPrice: `~$${estimatedPrice}`,
                     pdfAttachment: pdfBase64,
                     source: 'Quote Calculator'
                 })
@@ -258,15 +464,33 @@ const QuoteCalculator = () => {
         }
     };
 
-    const extrasList = [
-        { id: 'oven', label: 'Inside Oven ($35)' },
-        { id: 'fridge', label: 'Inside Refrigerator ($35)' },
-        { id: 'cabinets', label: 'Inside Cabinets ($40)' },
-        { id: 'baseboards', label: 'Deep Baseboards ($45)' },
-        { id: 'patio', label: 'Patio/Balcony ($50)' },
-        { id: 'wall', label: 'Wall Cleaning ($80)' },
-        { id: 'bedSheet', label: 'Bed Sheet Change ($15)' },
-    ];
+    const resetForm = () => {
+        setForm({
+            serviceType: 'Standard Cleaning', 
+            frequency: 'One-time',           
+            serviceDate: '',
+            hasPets: false,
+            sqft: 0, 
+            bedrooms: 1,
+            fullBathrooms: 1,
+            halfBathrooms: 0,
+            windowsCount: 0,                 
+            extras: [],                      
+            customerName: '',
+            customerEmail: '',
+            customerPhone: '',
+            customerAddress: '',
+            city: 'Boca Raton',
+            message: '',
+            referenceImages: [],
+            acceptTerms: false,
+            acceptQualityPolicy: false,
+            isUrgent: false
+        });
+        setStep(1);
+        setSubmitStatus(null);
+        setHasInteracted(false);
+    };
 
     const inputClasses = "w-full bg-white border border-sky-pale rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all";
 
@@ -277,253 +501,638 @@ const QuoteCalculator = () => {
                 <meta name="description" content="Schedule your cleaning today and let our team make your home sparkle. Get an instant estimate now." />
             </Helmet>
 
-            <section className="pt-32 pb-20 bg-gradient-to-br from-sky-pale to-white min-h-screen">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="pt-32 pb-32 lg:pb-20 bg-gradient-to-br from-sky-pale to-white min-h-[90vh]">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-center mb-12"
+                        className="text-center mb-8"
                     >
                         <h1 className="text-4xl md:text-5xl font-black text-navy mb-4">
-                            Get Your <span className="text-primary">Instant Cleaning Estimate</span>
+                            Your <span className="text-primary">Instant Cleaning Quote</span>
                         </h1>
-                        <p className="text-xl text-charcoal/80 mb-2">
-                            Answer a few quick questions to see the estimated cost of your cleaning service.
+                        <p className="text-lg text-charcoal/80 mb-2">
+                            Answer a few quick questions to customize your perfect cleaning service.
                         </p>
-                        <p className="text-sm font-bold text-primary">(No obligation – we will confirm the final price on-site.)</p>
                     </motion.div>
+
+                    {/* Trust Badges */}
+                    <div className="flex justify-center items-center space-x-4 md:space-x-8 mb-10 text-primary font-bold text-xs sm:text-sm bg-white/50 py-3 rounded-full mx-auto max-w-fit px-6 shadow-sm border border-sky-light">
+                        <div className="flex items-center"><span className="material-symbols-outlined text-lg mr-1.5" translate="no">verified_user</span> Insured</div>
+                        <div className="flex items-center"><span className="material-symbols-outlined text-lg mr-1.5" translate="no">star</span> Professional</div>
+                        <div className="flex items-center"><span className="material-symbols-outlined text-lg mr-1.5" translate="no">thumb_up</span> 100% Guaranteed</div>
+                    </div>
 
                     {submitStatus === 'success' ? (
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="bg-white rounded-3xl p-10 shadow-2xl text-center border-t-8 border-primary"
+                            className="bg-white rounded-3xl p-10 shadow-2xl text-center border-t-8 border-primary md:mx-auto max-w-2xl"
                         >
-                            <span className="material-symbols-outlined text-6xl text-primary mb-4">check_circle</span>
+                            <span className="material-symbols-outlined text-6xl text-primary mb-4" translate="no">check_circle</span>
                             <h2 className="text-3xl font-bold text-navy mb-4">Quote Request Sent!</h2>
                             <p className="text-lg text-charcoal/80 mb-6">
-                                We will confirm availability after reviewing your request. We've emailed a detailed PDF copy of your estimate to {form.customerEmail}.
+                                We've emailed a detailed PDF copy of your estimate to {form.customerEmail}. Our team will contact you shortly to confirm the details.
                             </p>
-                            <button onClick={() => window.location.reload()} className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-navy transition-colors">
+                            <button onClick={resetForm} className="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-navy transition-colors">
                                 Calculate Another Quote
                             </button>
                         </motion.div>
                     ) : (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-10">
                             {/* Form Column */}
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="lg:col-span-2 bg-white rounded-3xl p-8 shadow-xl"
-                            >
-                                <form onSubmit={handleSubmit} className="space-y-8">
-                                    
-                                    {/* CITY VALIDATOR */}
-                                    <div className="bg-sky-pale/20 p-6 rounded-2xl border border-sky-light">
-                                        <label className="block text-sm font-bold text-navy mb-2">Service Area City</label>
-                                        <select 
-                                            name="city" 
-                                            value={form.city} 
-                                            onChange={handleInput} 
-                                            className={`${inputClasses} ${cityError ? 'border-red-500' : ''}`}
-                                        >
-                                            <option value="Boca Raton">Boca Raton</option>
-                                            <option value="Boynton Beach">Boynton Beach</option>
-                                            <option value="Delray Beach">Delray Beach</option>
-                                            <option value="Other">Other City (Outside Service Area)</option>
-                                        </select>
-                                        {cityError && (
-                                            <p className="text-red-600 font-bold mt-2 text-sm">{cityError}</p>
-                                        )}
-                                    </div>
-
-                                    {/* Section 1: Service Details */}
-                                    <div>
-                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
-                                            <span className="material-symbols-outlined text-primary mr-2">cleaning_services</span>
-                                            1. Tell us about your home
-                                        </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                                <label className="block text-sm font-bold text-charcoal mb-2">Type of Cleaning</label>
-                                                <select name="serviceType" value={form.serviceType} onChange={handleInput} className={inputClasses}>
-                                                    <option value="Standard cleaning">Standard cleaning</option>
-                                                    <option value="Deep cleaning">Deep cleaning</option>
-                                                    <option value="Move in / Move out">Move In / Move Out</option>
-                                                    <option value="Post construction">Post construction</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-bold text-charcoal mb-2">How Often?</label>
-                                                <select name="frequency" value={form.frequency} onChange={handleInput} className={inputClasses}>
-                                                    <option value="One-time">Just Once</option>
-                                                    <option value="Weekly">Weekly (Best Value)</option>
-                                                    <option value="Bi-weekly">Bi-weekly</option>
-                                                    <option value="Monthly">Monthly</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-bold text-charcoal mb-2">Current Condition</label>
-                                                <select name="condition" value={form.condition} onChange={handleInput} className={inputClasses}>
-                                                    <option value="Light cleaning">Light cleaning</option>
-                                                    <option value="Average condition">Average condition (+10%)</option>
-                                                    <option value="Heavy buildup">Heavy buildup (+25%)</option>
-                                                </select>
-                                            </div>
+                            <div className="lg:col-span-2">
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl relative"
+                                >
+                                    {/* Progress indicator */}
+                                    <div className="mb-10">
+                                        <div className="flex justify-between items-center mb-3">
+                                            <span className="text-sm font-black text-navy uppercase tracking-wider">Step {step} of {totalSteps}</span>
+                                            <span className="text-sm font-bold text-primary">{Math.round((step / totalSteps) * 100)}%</span>
+                                        </div>
+                                        <div className="w-full bg-sky-pale rounded-full h-3 overflow-hidden">
+                                            <div 
+                                                className="bg-primary h-full rounded-full transition-all duration-500 ease-out" 
+                                                style={{ width: `${(step / totalSteps) * 100}%` }}
+                                            ></div>
                                         </div>
                                     </div>
 
-                                    {/* Section 2: Property Specs */}
-                                    <div>
-                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
-                                            <span className="material-symbols-outlined text-primary mr-2">straighten</span>
-                                            2. Home Size & Detail
-                                        </h3>
-                                        <div className="space-y-8">
-                                            <div>
-                                                <div className="flex justify-between mb-2">
-                                                    <label className="text-sm font-bold text-charcoal">Approximate Size (SqFt)</label>
-                                                    <span className="text-primary font-bold">{form.sqft > 0 ? `${form.sqft} sqft +` : 'Select size'}</span>
-                                                </div>
-                                                <input type="range" name="sqft" min="500" max="4000" step="100" value={form.sqft || 500} onChange={handleInput} className="w-full accent-primary" />
-                                            </div>
+                                    <form onSubmit={handleSubmit} className="space-y-4">
+                                        
+                                        <AnimatePresence mode="wait">
+                                            {/* STEP 1: Details */}
+                                            {step === 1 && (
+                                                <motion.div 
+                                                    key="step1"
+                                                    initial={{ opacity: 0, x: 20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -20 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="space-y-8"
+                                                >
+                                                    <div className="bg-sky-pale/20 p-6 rounded-2xl border border-sky-light">
+                                                        <label className="block text-sm font-bold text-navy mb-2">Service Area City</label>
+                                                        <select name="city" value={form.city} onChange={handleInput} className={`${inputClasses} ${cityError ? 'border-red-500' : ''}`}>
+                                                            <option value="Boca Raton">Boca Raton</option>
+                                                            <option value="Boynton Beach">Boynton Beach</option>
+                                                            <option value="Delray Beach">Delray Beach</option>
+                                                            <option value="Other">Other City (Outside Area)</option>
+                                                        </select>
+                                                        {cityError && <p className="text-red-500 font-bold mt-2 text-sm">{cityError}</p>}
+                                                    </div>
+
+                                                    <div>
+                                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
+                                                            <span className="material-symbols-outlined text-primary mr-2" translate="no">cleaning_services</span>
+                                                            1. Tell us about your home & service
+                                                        </h3>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                                            <div className="md:col-span-2">
+                                                                <div className="flex justify-between items-center mb-2">
+                                                                    <label className="block text-sm font-bold text-charcoal">Type of Cleaning</label>
+                                                                    <button type="button" onClick={() => setShowModal(true)} className="text-[#0097DB] text-sm font-bold flex items-center hover:underline bg-sky-pale/20 px-3 py-1 rounded-full border border-[#0097DB]/20">
+                                                                        <span className="material-symbols-outlined text-[16px] mr-1" translate="no">info</span>
+                                                                        View Details
+                                                                    </button>
+                                                                </div>
+                                                                <select name="serviceType" value={form.serviceType} onChange={handleInput} className={inputClasses}>
+                                                                    <option value="Standard Cleaning">Standard Cleaning (Maintenance)</option>
+                                                                    <option value="Deep Cleaning">Deep Cleaning (Recommended for first time)</option>
+                                                                    <option value="Move Out/ Move in Cleaning">Move Out/ Move in Cleaning</option>
+                                                                    <option value="Commercial Cleaning - Standard">Commercial Cleaning - Standard</option>
+                                                                    <option value="Post construction">Post construction</option>
+                                                                </select>
+                                                                
+                                                                <AnimatePresence>
+                                                                    {form.serviceType === 'Standard Cleaning' && (
+                                                                        <motion.div 
+                                                                            initial={{ height: 0, opacity: 0 }}
+                                                                            animate={{ height: 'auto', opacity: 1 }}
+                                                                            exit={{ height: 0, opacity: 0 }}
+                                                                            className="mt-4 bg-primary/10 border border-primary/30 rounded-xl p-4 flex items-start space-x-3 overflow-hidden shadow-sm"
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-primary text-[20px] mt-0.5" translate="no">auto_awesome</span>
+                                                                            <p className="text-xs text-navy font-medium leading-relaxed">
+                                                                                <span className="font-black text-primary uppercase mr-1">Pro Tip:</span> 
+                                                                                Standard Cleaning is a maintenance service. If this is your first time with us or your home hasn't been professionally cleaned in the last 30 days, we highly recommend starting with a <span className="font-bold underline">Deep Cleaning</span> for the best results!
+                                                                            </p>
+                                                                        </motion.div>
+                                                                    )}
+                                                                </AnimatePresence>
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-sm font-bold text-charcoal mb-2">How Often?</label>
+                                                                <select name="frequency" value={form.frequency} onChange={handleInput} className={inputClasses}>
+                                                                    <option value="One-time">Just Once</option>
+                                                                    <option value="Weekly">Weekly (Best Value)</option>
+                                                                    <option value="Bi-weekly">Bi-weekly</option>
+                                                                    <option value="Monthly">Monthly</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="flex items-center space-x-3 pt-6">
+                                                                <input type="checkbox" id="hasPets" name="hasPets" checked={form.hasPets} onChange={handleInput} className="w-6 h-6 accent-primary rounded cursor-pointer" />
+                                                                <label htmlFor="hasPets" className="text-base font-bold text-navy cursor-pointer">Do you have pets?</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button" onClick={nextStep} disabled={!!cityError} className={`w-full text-white font-bold py-4 rounded-xl transition-all shadow-lg flex justify-center items-center text-lg mt-8 border-none outline-none ${cityError ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-[#0097DB] hover:bg-navy shadow-[#0097DB]/30 hover:-translate-y-1'}`}>
+                                                        Next Step <span className="material-symbols-outlined ml-2" translate="no">arrow_forward</span>
+                                                    </button>
+                                                </motion.div>
+                                            )}
                                             
-                                            <div>
-                                                <div className="flex justify-between mb-2">
-                                                    <label className="text-sm font-bold text-charcoal">Number of Windows (Int/Ext)</label>
-                                                    <span className="text-primary font-bold">{form.windowsCount}</span>
-                                                </div>
-                                                <input type="range" name="windowsCount" min="0" max="30" step="1" value={form.windowsCount} onChange={handleInput} className="w-full accent-primary" />
-                                                <p className="text-xs text-charcoal/60 mt-1">$10 per large window (interior + exterior includes)</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            {/* STEP 2: Specs */}
+                                            {step === 2 && (
+                                                <motion.div 
+                                                    key="step2"
+                                                    initial={{ opacity: 0, x: 20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -20 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="space-y-8"
+                                                >
+                                                    <div>
+                                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
+                                                            <span className="material-symbols-outlined text-primary mr-2" translate="no">straighten</span>
+                                                            2. Home Details
+                                                        </h3>
+                                                        <div className="space-y-10">
+                                                            <div>
+                                                                <div className="flex justify-between mb-4">
+                                                                    <label className="text-sm font-bold text-charcoal">Approximate Size (SqFt)</label>
+                                                                    <span className="text-primary font-black text-lg bg-sky-pale px-3 py-1 rounded-lg">{form.sqft > 0 ? `${form.sqft} sqft +` : 'Select'}</span>
+                                                                </div>
+                                                                <input type="range" name="sqft" min="500" max="4000" step="100" value={form.sqft || 500} onChange={handleInput} className="w-full accent-primary h-2 bg-sky-light/50 rounded-lg appearance-none cursor-pointer border-none" />
+                                                            </div>
+                                                            
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                                <div>
+                                                                    <label className="block text-sm font-bold text-charcoal mb-2">Bedrooms</label>
+                                                                    <div className="flex bg-white border border-sky-pale rounded-xl overflow-hidden">
+                                                                        <button type="button" onClick={() => setForm(p=>({...p, bedrooms: Math.max(1, p.bedrooms-1)}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">-</button>
+                                                                        <div className="flex-1 flex items-center justify-center font-bold text-navy text-lg">{form.bedrooms}</div>
+                                                                        <button type="button" onClick={() => setForm(p=>({...p, bedrooms: p.bedrooms+1}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">+</button>
+                                                                    </div>
+                                                                    <p className="text-[10px] text-charcoal/60 mt-1">4 included, +$20 per extra</p>
+                                                                </div>
+                                                                <div className="md:col-span-1">
+                                                                    <label className="block text-sm font-bold text-charcoal mb-2">Full Bathrooms</label>
+                                                                    <div className="flex bg-white border border-sky-pale rounded-xl overflow-hidden">
+                                                                        <button type="button" onClick={() => setForm(p=>({...p, fullBathrooms: Math.max(0, p.fullBathrooms-1)}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">-</button>
+                                                                        <div className="flex-1 flex items-center justify-center font-bold text-navy text-lg">{form.fullBathrooms}</div>
+                                                                        <button type="button" onClick={() => setForm(p=>({...p, fullBathrooms: p.fullBathrooms+1}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">+</button>
+                                                                    </div>
+                                                                    <p className="text-[10px] text-charcoal/60 mt-1">Full = 1.0 Unit ($20 extra)</p>
+                                                                </div>
+                                                                <div>
+                                                                    <label className="block text-sm font-bold text-charcoal mb-2">Half Bathrooms</label>
+                                                                    <div className="flex bg-white border border-sky-pale rounded-xl overflow-hidden">
+                                                                        <button type="button" onClick={() => setForm(p=>({...p, halfBathrooms: Math.max(0, p.halfBathrooms-1)}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">-</button>
+                                                                        <div className="flex-1 flex items-center justify-center font-bold text-navy text-lg">{form.halfBathrooms}</div>
+                                                                        <button type="button" onClick={() => setForm(p=>({...p, halfBathrooms: p.halfBathrooms+1}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">+</button>
+                                                                    </div>
+                                                                    <p className="text-[10px] text-charcoal/60 mt-1">Half = 0.5 Unit ($10 extra)</p>
+                                                                </div>
+                                                                <div className="md:col-span-2">
+                                                                    <p className="text-xs text-primary font-bold">Note: 4 units included. Units = Full + (Half * 0.5)</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                    {/* Section 3: Extras */}
-                                    <div>
-                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
-                                            <span className="material-symbols-outlined text-primary mr-2">add_circle</span>
-                                            3. Extra Services (Optional)
-                                        </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                            {extrasList.map(extra => (
-                                                <label key={extra.id} className={`flex items-center p-3 rounded-lg border cursor-pointer transition-colors ${form.extras.includes(extra.id) ? 'border-primary bg-sky-pale/30' : 'border-sky-pale hover:border-primary/50'}`}>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="extras"
-                                                        value={extra.id}
-                                                        checked={form.extras.includes(extra.id)}
-                                                        onChange={handleInput}
-                                                        className="mr-3 accent-primary w-5 h-5 rounded"
-                                                    />
-                                                    <span className="text-sm font-medium text-navy">{extra.label}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
+                                                    <div className="flex gap-4 pt-4">
+                                                        <button type="button" onClick={prevStep} className="w-1/3 text-primary font-bold py-4 rounded-xl border-2 border-primary/20 hover:border-primary hover:bg-sky-pale transition-all flex justify-center items-center group">
+                                                            <span className="material-symbols-outlined mr-2 group-hover:-translate-x-1 transition-transform" translate="no">arrow_back</span> Back
+                                                        </button>
+                                                        <button type="button" onClick={nextStep} className="w-2/3 text-white font-bold py-4 rounded-xl bg-primary hover:bg-navy transition-all shadow-lg hover:shadow-primary/30 shadow-primary/20 flex justify-center items-center hover:-translate-y-1">
+                                                            Next Step <span className="material-symbols-outlined ml-2" translate="no">arrow_forward</span>
+                                                        </button>
+                                                    </div>
+                                                </motion.div>
+                                            )}
 
-                                    {/* Section 4: Contact Info */}
-                                    <div>
-                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
-                                            <span className="material-symbols-outlined text-primary mr-2">person</span>
-                                            4. Final Details
-                                        </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <input type="text" name="customerName" placeholder="Full Name" required value={form.customerName} onChange={handleInput} className={inputClasses} />
-                                            <input type="email" name="customerEmail" placeholder="Email Address" required value={form.customerEmail} onChange={handleInput} className={inputClasses} />
-                                            <input type="tel" name="customerPhone" placeholder="Phone Number" required value={form.customerPhone} onChange={handleInput} className={`md:col-span-2 ${inputClasses}`} />
-                                            <input type="text" name="customerAddress" placeholder="Full Address" required value={form.customerAddress} onChange={handleInput} className={`md:col-span-2 ${inputClasses}`} />
-                                            <textarea name="message" placeholder="Tell us more about your cleaning needs..." rows="3" value={form.message} onChange={handleInput} className={`md:col-span-2 ${inputClasses} resize-none`}></textarea>
-                                        </div>
-                                    </div>
+                                            {/* STEP 3: Extras */}
+                                            {step === 3 && (
+                                                <motion.div 
+                                                    key="step3"
+                                                    initial={{ opacity: 0, x: 20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -20 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="space-y-8"
+                                                >
+                                                    <div>
+                                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
+                                                            <span className="material-symbols-outlined text-primary mr-2" translate="no">add_circle</span>
+                                                            3. Extra Services (Optional)
+                                                        </h3>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                            {extrasList.map(extra => {
+                                                                if(extra.isCounter) {
+                                                                    return (
+                                                                        <div key={extra.id} className={`p-4 rounded-xl border-2 flex flex-col justify-between transition-all ${form.windowsCount > 0 ? 'border-primary bg-sky-pale/30 shadow-sm' : 'border-sky-light/50 bg-white'}`}>
+                                                                            <span className="text-sm font-bold text-navy mb-3">{extra.label}</span>
+                                                                            <div className="flex bg-white border border-sky-pale rounded-xl overflow-hidden h-10 w-32 self-end">
+                                                                                <button type="button" onClick={() => handleWindowChange(-1)} className="w-10 bg-sky-pale text-primary font-bold hover:bg-primary hover:text-white transition-colors">-</button>
+                                                                                <div className="flex-1 flex items-center justify-center font-bold text-navy">{form.windowsCount}</div>
+                                                                                <button type="button" onClick={() => handleWindowChange(1)} className="w-10 bg-sky-pale text-primary font-bold hover:bg-primary hover:text-white transition-colors">+</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                                
+                                                                return (
+                                                                    <label key={extra.id} className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${form.extras.includes(extra.id) ? 'border-primary bg-sky-pale/30 shadow-sm' : 'border-sky-light/50 hover:border-primary/50 bg-white'}`}>
+                                                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 ${form.extras.includes(extra.id) ? 'border-primary bg-primary' : 'border-gray-300'}`}>
+                                                                            {form.extras.includes(extra.id) && <span className="material-symbols-outlined text-white text-[14px] font-black" translate="no">check</span>}
+                                                                        </div>
+                                                                        <input type="checkbox" name="extras" value={extra.id} checked={form.extras.includes(extra.id)} onChange={handleInput} className="hidden" />
+                                                                        <span className="text-sm font-bold text-navy">{extra.label}</span>
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
 
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting || !!cityError}
-                                        className={`w-full text-white font-bold py-4 rounded-xl transition-colors shadow-lg flex justify-center items-center text-lg mt-8 ${cityError ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-navy shadow-primary/30'}`}
-                                    >
-                                        {isSubmitting ? (
-                                            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
-                                        ) : (
-                                            <>Get My Cleaning Quote <span className="material-symbols-outlined ml-2">mail</span></>
-                                        )}
-                                    </button>
-                                </form>
-                            </motion.div>
+                                                    <div className="flex gap-4 pt-4">
+                                                        <button type="button" onClick={prevStep} className="w-1/3 text-primary font-bold py-4 rounded-xl border-2 border-primary/20 hover:border-primary hover:bg-sky-pale transition-all flex justify-center items-center group">
+                                                            <span className="material-symbols-outlined mr-2 group-hover:-translate-x-1 transition-transform" translate="no">arrow_back</span> Back
+                                                        </button>
+                                                        <button type="button" onClick={nextStep} className="w-2/3 text-white font-bold py-4 rounded-xl bg-primary hover:bg-navy transition-all shadow-lg hover:shadow-primary/30 shadow-primary/20 flex justify-center items-center hover:-translate-y-1">
+                                                            Final Step <span className="material-symbols-outlined ml-2" translate="no">person</span>
+                                                        </button>
+                                                    </div>
+                                                </motion.div>
+                                            )}
 
-                            {/* Floating Summary Column */}
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="lg:col-span-1"
-                            >
-                                <div className="sticky top-32 bg-navy text-white rounded-3xl p-8 shadow-2xl overflow-hidden relative">
+                                            {/* STEP 4: Info + Submit */}
+                                            {step === 4 && (
+                                                <motion.div 
+                                                    key="step4"
+                                                    initial={{ opacity: 0, x: 20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -20 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="space-y-8"
+                                                >
+                                                    <div>
+                                                        <h3 className="text-xl font-bold text-navy mb-4 flex items-center">
+                                                            <span className="material-symbols-outlined text-primary mr-2" translate="no">check_circle</span>
+                                                            4. Final Details
+                                                        </h3>
+                                                        
+                                                        <div className="md:col-span-2 bg-sky-pale/10 p-5 rounded-xl border border-sky-light/50 mb-6">
+                                                            <label className="block text-sm font-bold text-navy mb-3">How would you like to proceed?</label>
+                                                            <div className="flex flex-col sm:flex-row gap-4">
+                                                                <label className={`flex-1 border-2 p-4 rounded-xl cursor-pointer flex items-center transition-all ${form.intent === 'quote' ? 'border-[#0097DB] bg-sky-pale/20' : 'border-gray-200 hover:border-[#0097DB]/50'}`}>
+                                                                    <input type="radio" name="intent" value="quote" checked={form.intent === 'quote'} onChange={handleInput} className="hidden" />
+                                                                    <div className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${form.intent === 'quote' ? 'border-[#0097DB] bg-[#0097DB]' : 'border-gray-300'}`}>
+                                                                        {form.intent === 'quote' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                                    </div>
+                                                                    <span className="font-bold text-sm text-navy">I'm just saving this quote for later</span>
+                                                                </label>
+                                                                <label className={`flex-1 border-2 p-4 rounded-xl cursor-pointer flex items-center transition-all ${form.intent === 'schedule' ? 'border-[#0097DB] bg-sky-pale/20' : 'border-gray-200 hover:border-[#0097DB]/50'}`}>
+                                                                    <input type="radio" name="intent" value="schedule" checked={form.intent === 'schedule'} onChange={handleInput} className="hidden" />
+                                                                    <div className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${form.intent === 'schedule' ? 'border-[#0097DB] bg-[#0097DB]' : 'border-gray-300'}`}>
+                                                                        {form.intent === 'schedule' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                                    </div>
+                                                                    <span className="font-bold text-sm text-navy">I'm ready to schedule this service</span>
+                                                                </label>
+                                                            </div>
+                                                            <AnimatePresence>
+                                                                {form.intent === 'schedule' && (
+                                                                    <motion.div 
+                                                                        initial={{ height: 0, opacity: 0 }} 
+                                                                        animate={{ height: 'auto', opacity: 1 }} 
+                                                                        exit={{ height: 0, opacity: 0 }} 
+                                                                        className="mt-4 overflow-hidden space-y-4"
+                                                                    >
+                                                                        <div>
+                                                                            <label className="block text-sm font-bold text-navy mb-2">When would you like the service? <span className="text-primary font-normal">(Subject to availability)</span></label>
+                                                                            <input 
+                                                                                type="date" 
+                                                                                name="serviceDate" 
+                                                                                value={form.serviceDate} 
+                                                                                onChange={handleInput} 
+                                                                                required={form.intent === 'schedule'}
+                                                                                className={inputClasses} 
+                                                                            />
+                                                                        </div>
+                                                                        
+                                                                        {/* Urgency Fee Toggle */}
+                                                                        <label className={`flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all ${form.isUrgent ? 'border-primary bg-sky-pale/30 shadow-sm' : 'border-sky-light/50 bg-white'}`}>
+                                                                            <div className="flex-shrink-0 mt-0.5 mr-3">
+                                                                                <input 
+                                                                                    type="checkbox" 
+                                                                                    name="isUrgent" 
+                                                                                    checked={form.isUrgent} 
+                                                                                    onChange={handleInput} 
+                                                                                    className="w-5 h-5 accent-primary rounded cursor-pointer" 
+                                                                                />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="block font-bold text-sm text-navy">I need this cleaning urgently (Same day / Next day)</span>
+                                                                                <span className="block text-[11px] text-primary font-bold">+$50 Urgency Fee applies</span>
+                                                                            </div>
+                                                                        </label>
+                                                                    </motion.div>
+                                                                )}
+                                                            </AnimatePresence>
+                                                        </div>
+
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                            <input type="text" name="customerName" placeholder="Full Name" required value={form.customerName} onChange={handleInput} className={inputClasses} />
+                                                            <input type="email" name="customerEmail" placeholder="Email Address" required value={form.customerEmail} onChange={handleInput} className={inputClasses} />
+                                                            <input type="tel" name="customerPhone" placeholder="Phone Number" required value={form.customerPhone} onChange={handleInput} className={`md:col-span-2 ${inputClasses}`} />
+                                                            <input type="text" name="customerAddress" placeholder="Full Address" required value={form.customerAddress} onChange={handleInput} className={`md:col-span-2 ${inputClasses}`} />
+                                                            <textarea name="message" placeholder="Extra notes or instructions..." rows="3" value={form.message} onChange={handleInput} className={`md:col-span-2 ${inputClasses} resize-none`}></textarea>
+                                                            
+                                                            {/* Image Upload */}
+                                                            <div className="md:col-span-2 bg-sky-pale/20 border-2 border-dashed border-sky-pale rounded-xl p-6 text-center">
+                                                                <h4 className="font-bold text-navy mb-2">Attach Reference Images (Optional)</h4>
+                                                                <p className="text-xs text-charcoal/70 mb-4">Max 2 images (e.g. current condition of specific areas). Limit 5MB per image.</p>
+                                                                
+                                                                <div className="flex flex-col items-center justify-center">
+                                                                    {form.referenceImages.length < 2 && (
+                                                                        <label className="bg-white border border-primary text-primary font-bold py-2 px-6 rounded-full cursor-pointer hover:bg-primary hover:text-white transition-colors mb-4 inline-block">
+                                                                            <span className="material-symbols-outlined align-middle mr-2" translate="no">upload</span>
+                                                                            Select Image
+                                                                            <input type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" />
+                                                                        </label>
+                                                                    )}
+                                                                    
+                                                                    {form.referenceImages.length > 0 && (
+                                                                        <div className="flex gap-4 flex-wrap justify-center">
+                                                                            {form.referenceImages.map((src, idx) => (
+                                                                                <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border-2 border-primary">
+                                                                                    <img src={src} alt={`Ref ${idx+1}`} className="w-full h-full object-cover" />
+                                                                                    <button type="button" onClick={() => removeImage(idx)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow">&times;</button>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {submitStatus === 'error' && (
+                                                        <div className="md:col-span-2 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start space-x-3 mb-4">
+                                                            <span className="material-symbols-outlined text-red-600" translate="no">error</span>
+                                                            <p className="text-sm text-red-800 font-bold leading-relaxed">
+                                                                There was an error sending your request to our server. Your PDF quote is ready, but please try submitting again or contact us directly.
+                                                            </p>
+                                                        </div>
+                                                    )}
+
+                                                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-5 mb-8 space-y-6">
+                                                        {/* Estimate Terms */}
+                                                        <div>
+                                                            <div className="flex items-start space-x-3 mb-4">
+                                                                <span className="material-symbols-outlined text-yellow-600 mt-0.5" translate="no">info</span>
+                                                                <p className="text-sm text-yellow-800 font-medium leading-relaxed">
+                                                                    <strong>Important Notice:</strong> The quoted cost is an estimate based on average conditions. The final price may be adjusted on-site depending on the actual condition of the property. The details of the service inclusions remain unchanged.
+                                                                </p>
+                                                            </div>
+                                                            <label className="flex items-start cursor-pointer group">
+                                                                <div className="flex-shrink-0 mt-0.5">
+                                                                    <input 
+                                                                        type="checkbox" 
+                                                                        name="acceptTerms" 
+                                                                        checked={form.acceptTerms} 
+                                                                        onChange={handleInput} 
+                                                                        required
+                                                                        className="w-5 h-5 accent-[#0097DB] rounded border-yellow-400 cursor-pointer" 
+                                                                    />
+                                                                </div>
+                                                                <span className="ml-3 text-sm font-bold text-navy group-hover:text-[#0097DB] transition-colors leading-tight">
+                                                                    I acknowledge and accept that this quote is an estimate and the final price will be confirmed upon arrival.
+                                                                </span>
+                                                            </label>
+                                                        </div>
+
+                                                        {/* Quality Policy */}
+                                                        <div className="pt-4 border-t border-yellow-200">
+                                                            <div className="flex items-start space-x-3 mb-4">
+                                                                <span className="material-symbols-outlined text-primary mt-0.5" translate="no">verified</span>
+                                                                <p className="text-sm text-navy font-bold leading-relaxed">
+                                                                    Quality Policy
+                                                                </p>
+                                                            </div>
+                                                            <p className="text-xs text-charcoal/80 italic mb-4 leading-relaxed bg-white/50 p-3 rounded-lg border border-sky-pale">
+                                                                "At Angels Cleaning Services, we are committed to providing reliable, detailed cleaning services tailored to each client. We work with responsibility and dedication, always striving to exceed expectations and ensure clean, safe, and harmonious spaces."
+                                                            </p>
+                                                            <label className="flex items-start cursor-pointer group">
+                                                                <div className="flex-shrink-0 mt-0.5">
+                                                                    <input 
+                                                                        type="checkbox" 
+                                                                        name="acceptQualityPolicy" 
+                                                                        checked={form.acceptQualityPolicy} 
+                                                                        onChange={handleInput} 
+                                                                        required
+                                                                        className="w-5 h-5 accent-[#0097DB] rounded border-sky-pale cursor-pointer" 
+                                                                    />
+                                                                </div>
+                                                                <span className="ml-3 text-sm font-bold text-navy group-hover:text-[#0097DB] transition-colors leading-tight">
+                                                                    I have read and I accept the Quality Policy.
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                                        <button type="button" onClick={prevStep} className="w-full sm:w-1/3 text-primary font-bold py-4 rounded-xl border-2 border-primary/20 hover:border-primary hover:bg-sky-pale transition-all flex justify-center items-center group">
+                                                            <span className="material-symbols-outlined mr-2 group-hover:-translate-x-1 transition-transform" translate="no">arrow_back</span> Back
+                                                        </button>
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isSubmitting || !!cityError || !form.acceptTerms || !form.acceptQualityPolicy || (form.intent === 'schedule' && !form.serviceDate)}
+                                                            className={`w-full sm:w-2/3 text-white font-bold py-4 rounded-xl transition-all shadow-lg flex justify-center items-center text-lg ${cityError || !form.acceptTerms || !form.acceptQualityPolicy || (form.intent === 'schedule' && !form.serviceDate) ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-[#0097DB] hover:bg-navy shadow-[#0097DB]/30 hover:-translate-y-1'}`}
+                                                        >
+                                                            {isSubmitting ? (
+                                                                <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
+                                                            ) : (
+                                                                <>Send My Quote Request <span className="material-symbols-outlined ml-2" translate="no">mail</span></>
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </form>
+                                </motion.div>
+                            </div>
+
+                            {/* Floating Summary Column - DESKTOP ONLY */}
+                            <div className="hidden lg:block lg:col-span-1">
+                                <motion.div
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="sticky top-32 bg-navy text-white rounded-3xl p-8 shadow-2xl overflow-hidden relative"
+                                >
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-bl-full blur-2xl"></div>
 
                                     <h3 className="text-2xl font-black mb-6 border-b border-white/10 pb-4 flex items-center">
-                                        <span className="material-symbols-outlined mr-2">calculate</span>
-                                        See your price
+                                        <span className="material-symbols-outlined mr-2" translate="no">calculate</span>
+                                        Estimation
                                     </h3>
 
                                     <div className="space-y-4 mb-8">
                                         <div className="flex justify-between items-center text-sky-pale border-b border-white/10 pb-2">
                                             <span>Service:</span>
-                                            <span className="font-bold text-white text-right">{form.serviceType}</span>
+                                            <span className="font-bold text-white text-right truncate max-w-[150px]" title={form.serviceType}>{form.serviceType}</span>
                                         </div>
                                         <div className="flex justify-between items-center text-sky-pale border-b border-white/10 pb-2">
-                                            <span>Size:</span>
-                                            <span className="font-bold text-white text-right">{form.sqft} sq ft</span>
+                                            <span>Date:</span>
+                                            <span className="font-bold text-white text-right truncate max-w-[150px]">{form.intent === 'quote' ? 'Exploring Quotes' : (form.serviceDate ? new Date(form.serviceDate).toLocaleDateString() : 'Needs scheduling')}</span>
                                         </div>
                                         <div className="flex justify-between items-center text-sky-pale border-b border-white/10 pb-2">
-                                            <span>Condition:</span>
-                                            <span className="font-bold text-white text-right">{form.condition}</span>
+                                            <span>House Info:</span>
+                                            <span className="font-bold text-white text-right">{form.sqft} sqft | {form.bedrooms}B | {form.fullBathrooms}F/{form.halfBathrooms}H</span>
                                         </div>
-                                        <div className="flex justify-between items-center text-sky-pale border-b border-white/10 pb-2">
-                                            <span>Windows:</span>
-                                            <span className="font-bold text-white text-right">{form.windowsCount}</span>
-                                        </div>
-                                        {form.extras.length > 0 && (
+                                        {step > 1 && (
+                                            <div className="flex justify-between items-center text-sky-pale border-b border-white/10 pb-2">
+                                                <span>Condition:</span>
+                                                <span className="font-bold text-white text-right truncate max-w-[150px]">{form.hasPets ? 'Pets Home' : 'Standard'}</span>
+                                            </div>
+                                        )}
+                                        {form.isUrgent && (
+                                            <div className="flex justify-between items-center text-sky-pale border-b border-white/10 pb-2">
+                                                <span>Urgency Fee:</span>
+                                                <span className="font-bold text-white text-right">$50</span>
+                                            </div>
+                                        )}
+                                        {step > 2 && (form.extras.length > 0 || form.windowsCount > 0) && (
                                             <div className="flex justify-between items-start text-sky-pale border-b border-white/10 pb-2">
                                                 <span>Extras:</span>
                                                 <span className="font-bold text-white text-right">
-                                                    {form.extras.length} selected
+                                                    {form.extras.length + (form.windowsCount > 0 ? 1 : 0)} selected
                                                 </span>
                                             </div>
                                         )}
                                     </div>
 
                                     <div className="bg-white/10 rounded-2xl p-6 text-center backdrop-blur-sm border border-white/20">
-                                        <p className="text-sky-pale text-sm uppercase tracking-wider font-bold mb-2">Estimated Range</p>
-                                        <p className="text-4xl font-black text-white">
-                                            {hasInteracted ? `$${priceRange.min} - $${priceRange.max}` : '$ --'}
-                                        </p>
+                                        <p className="text-sky-pale text-sm uppercase tracking-wider font-bold mb-2">Estimated Price</p>
+                                        <div className="flex items-baseline justify-center">
+                                            <span className="text-lg font-bold text-sky-pale mr-1">~</span>
+                                            <p className="text-4xl font-black text-white">
+                                                {hasInteracted ? `$${estimatedPrice}` : '$--'}
+                                            </p>
+                                        </div>
                                     </div>
-
-                                    <div className="mt-8 bg-sky-pale/10 rounded-2xl p-6 border border-sky-pale">
-                                        <h4 className="font-bold text-white mb-4 flex items-center">
-                                            <span className="material-symbols-outlined mr-2 text-primary">check_circle</span>
-                                            What's Included
-                                        </h4>
-                                        <ul className="space-y-3 text-sm text-sky-pale">
-                                            <li><strong className="text-white">Living & Bedrooms:</strong> Dusting, vacuum/mop floors, empty trash, ceiling fans (reachable), wipe light baseboards.</li>
-                                            <li><strong className="text-white">Kitchen:</strong> Clean counters, sink, stovetop, wipe exterior of appliances & cabinets, mop floors.</li>
-                                            <li><strong className="text-white">Bathrooms:</strong> Disinfect toilet, tub, shower, sink, clean mirrors & floors.</li>
-                                        </ul>
-
-                                        <h4 className="font-bold text-red-400 mt-6 mb-3 flex items-center">
-                                            <span className="material-symbols-outlined mr-2">cancel</span>
-                                            Not Included
-                                        </h4>
-                                        <p className="text-xs text-sky-pale/80">
-                                            Unless selected in "Extras": Inside oven, inside fridge/cabinets, post-construction debris, blind washing, moving heavy furniture, or high-ladder work.
-                                        </p>
+                                    
+                                    <div className="mt-8 text-center text-xs text-sky-pale/60 px-4">
+                                        <p>Final price confirmed on-site based on actual property condition.</p>
                                     </div>
-                                </div>
-                            </motion.div>
+                                </motion.div>
+                            </div>
                         </div>
                     )}
                 </div>
             </section>
+
+            {/* STICKY MOBILE SUMMARY FOOTER - Visible only on mobile/tablet */}
+            <AnimatePresence>
+                {!submitStatus && hasInteracted && (
+                    <motion.div 
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 100, opacity: 0 }}
+                        className="lg:hidden fixed bottom-0 left-0 right-0 bg-navy border-t-2 border-primary text-white p-4 shadow-[0_-15px_40px_rgba(0,0,0,0.3)] z-[100] pb-safe"
+                        style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
+                    >
+                        <div className="flex justify-between items-center max-w-5xl mx-auto">
+                            <div>
+                                <p className="text-[10px] text-sky-pale uppercase tracking-wider font-bold mb-0.5">Estimated Price</p>
+                                <p className="text-2xl font-black text-white leading-none">~${estimatedPrice}</p>
+                            </div>
+                            <div>
+                                {step < totalSteps ? (
+                                    <button type="button" onClick={nextStep} disabled={step === 1 && !!cityError} className={`bg-[#0097DB] text-white font-bold py-2.5 px-6 rounded-xl transition-all flex items-center shadow-lg ${(cityError) && step===1 ? 'opacity-50' : 'hover:bg-white hover:text-[#0097DB] active:scale-95'}`}>
+                                        Next <span className="material-symbols-outlined ml-2 text-sm" translate="no">arrow_forward</span>
+                                    </button>
+                                ) : (
+                                    <button type="button" onClick={handleSubmit} disabled={isSubmitting || !!cityError || !form.acceptTerms || !form.acceptQualityPolicy || (form.intent === 'schedule' && !form.serviceDate)} className={`bg-primary text-white font-bold py-2.5 px-6 rounded-xl transition-all flex items-center shadow-lg ${(isSubmitting || cityError || !form.acceptTerms || !form.acceptQualityPolicy || (form.intent === 'schedule' && !form.serviceDate)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white hover:text-primary active:scale-95'}`}>
+                                        {isSubmitting ? 'Sending...' : 'Submit'} {!isSubmitting && <span className="material-symbols-outlined ml-2 text-sm" translate="no">check_circle</span>}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* SERVICE DETAILS MODAL */}
+            <AnimatePresence>
+                {showModal && (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 pb-24 lg:pb-6">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-navy/60 backdrop-blur-sm"
+                            onClick={() => setShowModal(false)}
+                        />
+                        <motion.div 
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="bg-white rounded-3xl w-full max-w-3xl max-h-[85vh] shadow-2xl relative z-10 flex flex-col overflow-hidden"
+                        >
+                            {/* Modal Header */}
+                            <div className="flex justify-between items-center p-5 sm:p-6 border-b border-sky-pale bg-sky-pale/10">
+                                <div>
+                                    <h2 className="text-2xl font-black text-navy">{form.serviceType}</h2>
+                                    <p className="text-sm text-charcoal/70">What to expect from this service</p>
+                                </div>
+                                <button onClick={() => setShowModal(false)} className="w-10 h-10 bg-white rounded-full border shadow flex items-center justify-center text-charcoal hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors">
+                                    <span className="material-symbols-outlined font-bold" translate="no">close</span>
+                                </button>
+                            </div>
+
+                            {/* Modal Body */}
+                            <div className="p-5 sm:p-6 overflow-y-auto bg-gray-50/50 flex-1 relative">
+                                <div className="mb-6 bg-green-50/50 border border-green-200 rounded-2xl p-5 pb-6">
+                                    <h3 className="text-lg font-bold text-green-800 flex items-center mb-4 border-b border-green-200 pb-2">
+                                        <span className="material-symbols-outlined mr-2" translate="no">check_circle</span>
+                                        What's Included
+                                    </h3>
+                                    <div className="space-y-5">
+                                        {(serviceDetails[form.serviceType] || serviceDetails['Standard Cleaning']).included.map((inc, i) => (
+                                            <div key={i}>
+                                                <h4 className="font-bold text-navy text-sm mb-1">{inc.area}</h4>
+                                                <div className="text-sm text-charcoal whitespace-pre-line pl-2 leading-relaxed">
+                                                    {inc.tasks}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="bg-red-50/50 border border-red-200 rounded-2xl p-5 mb-4">
+                                    <h3 className="text-lg font-bold text-red-800 flex items-center mb-4 border-b border-red-200 pb-2">
+                                        <span className="material-symbols-outlined mr-2" translate="no">cancel</span>
+                                        Not Included
+                                    </h3>
+                                    <div className="text-sm text-charcoal whitespace-pre-line pl-2 leading-relaxed">
+                                        {(serviceDetails[form.serviceType] || serviceDetails['Standard Cleaning']).notIncluded.map(n => n.text).join('\n')}
+                                    </div>
+                                </div>
+                                
+                                <div className="mt-8 text-center text-xs text-charcoal/60 px-4">
+                                    <p>💡 Note: Additional services may apply depending on the property's actual condition upon arrival.</p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </>
     );
 };

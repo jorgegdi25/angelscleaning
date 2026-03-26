@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-sm">
                     {/* Brand & Intro */}
                     <div className="col-span-1 md:col-span-1">
-                        <Link to="/" className="inline-block mb-6">
+                        <Link to="/" className="inline-block mb-6" translate="no">
                             <img alt="Angels Cleaning Services Logo" className="h-20 w-auto" src="/logo-angels-c.png" />
                         </Link>
                         <p className="mb-6 leading-relaxed">
@@ -29,7 +29,7 @@ const Footer = () => {
                             <li><Link to="/services" className="hover:text-primary transition-colors">Our Services</Link></li>
                             <li><Link to="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
                             <li><Link to="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
-                            <li><a href="https://angelscleanservices.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+                            <li><Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
                         </ul>
                     </div>
 
@@ -58,7 +58,7 @@ const Footer = () => {
                             </li>
                             <li className="flex items-center">
                                 <FiMail className="text-primary mr-3 flex-shrink-0 text-lg" />
-                                <a href="mailto:info@angelscleanservices.com" className="break-all hover:text-primary transition-colors">info@angelscleanservices.com</a>
+                                <a href="mailto:angelscleaningservices28@gmail.com" className="break-all hover:text-primary transition-colors">angelscleaningservices28@gmail.com</a>
                             </li>
                         </ul>
                     </div>

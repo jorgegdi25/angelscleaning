@@ -8,6 +8,7 @@ import Contact from './pages/Contact';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import QuoteCalculator from './pages/QuoteCalculator';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/quote" element={<QuoteCalculator />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           </Routes>
         </main>
         <Footer />

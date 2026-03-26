@@ -70,13 +70,30 @@ const Home = () => {
               Reliable, professional, and committed to delivering spotless results for your home or business in South Florida.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link
-                className="w-full sm:w-auto inline-flex justify-center items-center bg-primary text-white hover:bg-sky-500 px-12 py-5 rounded-full text-lg font-black transition-all shadow-2xl shadow-primary/40 hover:-translate-y-1 hover:scale-105 active:scale-95"
-                to="/contact"
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.05, 1],
+                  boxShadow: [
+                    "0 20px 25px -5px rgba(0, 151, 219, 0.4)",
+                    "0 25px 30px -5px rgba(0, 151, 219, 0.6)",
+                    "0 20px 25px -5px rgba(0, 151, 219, 0.4)"
+                  ]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="w-full sm:w-auto"
               >
-                Book Now
-                <span className="material-icons ml-2">arrow_forward</span>
-              </Link>
+                <Link
+                  className="w-full inline-flex justify-center items-center bg-primary text-white hover:bg-sky-500 px-12 py-5 rounded-full text-lg font-black transition-all shadow-2xl hover:-translate-y-1 hover:scale-105 active:scale-95"
+                  to="/quote"
+                >
+                  Get a Free Quote
+                  <span className="material-icons ml-2" translate="no">arrow_forward</span>
+                </Link>
+              </motion.div>
               <Link
                 className="w-full sm:w-auto inline-flex justify-center items-center bg-white/10 backdrop-blur-xl text-white hover:bg-white/20 px-12 py-5 rounded-full text-lg font-bold border border-white/30 transition-all hover:-translate-y-1 active:scale-95"
                 to="/services"
@@ -89,7 +106,7 @@ const Home = () => {
 
         {/* Subtle decorative elements for that "Angelic" feel */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce opacity-50">
-          <span className="material-icons text-white text-3xl">expand_more</span>
+          <span className="material-icons text-white text-3xl" translate="no">expand_more</span>
         </div>
       </section>
 
@@ -117,7 +134,7 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <div className="w-16 h-16 bg-sky-pale rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all">
-                <span className="material-icons text-3xl">home</span>
+                <span className="material-icons text-3xl" translate="no">home</span>
               </div>
               <h4 className="text-2xl font-bold text-navy mb-4">
                 Residential Cleaning
@@ -131,7 +148,7 @@ const Home = () => {
                 to="/services"
               >
                 Learn More{" "}
-                <span className="material-icons ml-2 text-sm transition-transform group-hover/link:translate-x-1">
+                <span className="material-icons ml-2 text-sm transition-transform group-hover/link:translate-x-1" translate="no">
                   arrow_forward
                 </span>
               </Link>
@@ -142,7 +159,7 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <div className="w-16 h-16 bg-sky-pale rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all">
-                <span className="material-icons text-3xl">apartment</span>
+                <span className="material-icons text-3xl" translate="no">apartment</span>
               </div>
               <h4 className="text-2xl font-bold text-navy mb-4">
                 Commercial Cleaning
@@ -156,7 +173,7 @@ const Home = () => {
                 to="/services"
               >
                 Learn More{" "}
-                <span className="material-icons ml-2 text-sm transition-transform group-hover/link:translate-x-1">
+                <span className="material-icons ml-2 text-sm transition-transform group-hover/link:translate-x-1" translate="no">
                   arrow_forward
                 </span>
               </Link>
@@ -167,7 +184,7 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <div className="w-16 h-16 bg-sky-pale rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all">
-                <span className="material-icons text-3xl">
+                <span className="material-icons text-3xl" translate="no">
                   cleaning_services
                 </span>
               </div>
@@ -183,7 +200,7 @@ const Home = () => {
                 to="/services"
               >
                 Learn More{" "}
-                <span className="material-icons ml-2 text-sm transition-transform group-hover/link:translate-x-1">
+                <span className="material-icons ml-2 text-sm transition-transform group-hover/link:translate-x-1" translate="no">
                   arrow_forward
                 </span>
               </Link>
@@ -216,7 +233,7 @@ const Home = () => {
             >
               <div className="relative mb-8 inline-block">
                 <div className="w-24 h-24 bg-white rounded-3xl transition-all duration-300 flex items-center justify-center text-primary border border-sky-light shadow-lg">
-                  <span className="material-symbols-outlined text-4xl transition-all">
+                  <span className="material-symbols-outlined text-4xl transition-all" translate="no">
                     description
                   </span>
                 </div>
@@ -238,7 +255,7 @@ const Home = () => {
             >
               <div className="relative mb-8 inline-block">
                 <div className="w-24 h-24 bg-white rounded-3xl transition-all duration-300 flex items-center justify-center text-primary border border-sky-light shadow-lg">
-                  <span className="material-symbols-outlined text-4xl transition-all">
+                  <span className="material-symbols-outlined text-4xl transition-all" translate="no">
                     fact_check
                   </span>
                 </div>
@@ -260,7 +277,7 @@ const Home = () => {
             >
               <div className="relative mb-8 inline-block">
                 <div className="w-24 h-24 bg-white rounded-3xl transition-all duration-300 flex items-center justify-center text-primary border border-sky-light shadow-lg">
-                  <span className="material-symbols-outlined text-4xl transition-all">
+                  <span className="material-symbols-outlined text-4xl transition-all" translate="no">
                     cleaning_services
                   </span>
                 </div>
@@ -280,7 +297,7 @@ const Home = () => {
             >
               <div className="relative mb-8 inline-block">
                 <div className="w-24 h-24 bg-white rounded-3xl transition-all duration-300 flex items-center justify-center text-primary border border-sky-light shadow-lg">
-                  <span className="material-symbols-outlined text-4xl transition-all">
+                  <span className="material-symbols-outlined text-4xl transition-all" translate="no">
                     sentiment_very_satisfied
                   </span>
                 </div>
@@ -315,7 +332,7 @@ const Home = () => {
               <div className="absolute -bottom-10 -right-6 bg-white p-8 rounded-3xl shadow-2xl border border-sky-light hidden md:block backdrop-blur-md">
                 <div className="flex items-center gap-5">
                   <div className="w-14 h-14 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg shadow-primary/30">
-                    <span className="material-icons text-3xl">verified</span>
+                    <span className="material-icons text-3xl" translate="no">verified</span>
                   </div>
                   <div>
                     <p className="text-3xl font-black text-navy">100%</p>
@@ -346,7 +363,7 @@ const Home = () => {
                 <div className="flex gap-6 group">
                   <div className="flex-shrink-0">
                     <div className="w-14 h-14 bg-white text-primary rounded-2xl flex items-center justify-center border border-sky-pale shadow-md group-hover:scale-110 transition-transform">
-                      <span className="material-icons text-3xl">
+                      <span className="material-icons text-3xl" translate="no">
                         verified_user
                       </span>
                     </div>
@@ -364,7 +381,7 @@ const Home = () => {
                 <div className="flex gap-6 group">
                   <div className="flex-shrink-0">
                     <div className="w-14 h-14 bg-white text-primary rounded-2xl flex items-center justify-center border border-sky-pale shadow-md group-hover:scale-110 transition-transform">
-                      <span className="material-icons text-3xl">eco</span>
+                      <span className="material-icons text-3xl" translate="no">eco</span>
                     </div>
                   </div>
                   <div>
@@ -380,7 +397,7 @@ const Home = () => {
                 <div className="flex gap-6 group">
                   <div className="flex-shrink-0">
                     <div className="w-14 h-14 bg-white text-primary rounded-2xl flex items-center justify-center border border-sky-pale shadow-md group-hover:scale-110 transition-transform">
-                      <span className="material-icons text-3xl">schedule</span>
+                      <span className="material-icons text-3xl" translate="no">schedule</span>
                     </div>
                   </div>
                   <div>
@@ -431,14 +448,14 @@ const Home = () => {
               </div>
               <div className="p-8 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <span className="material-symbols-outlined text-primary text-3xl">
+                  <span className="material-symbols-outlined text-primary text-3xl" translate="no">
                     location_on
                   </span>
                   <h4 className="text-2xl font-black text-navy">
                     Delray Beach
                   </h4>
                 </div>
-                <span className="material-icons text-primary/30 group-hover:text-primary transition-colors">
+                <span className="material-icons text-primary/30 group-hover:text-primary transition-colors" translate="no">
                   arrow_outward
                 </span>
               </div>
@@ -458,12 +475,12 @@ const Home = () => {
               </div>
               <div className="p-8 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <span className="material-symbols-outlined text-primary text-3xl">
+                  <span className="material-symbols-outlined text-primary text-3xl" translate="no">
                     location_on
                   </span>
                   <h4 className="text-2xl font-black text-navy">Boca Raton</h4>
                 </div>
-                <span className="material-icons text-primary/30 group-hover:text-primary transition-colors">
+                <span className="material-icons text-primary/30 group-hover:text-primary transition-colors" translate="no">
                   arrow_outward
                 </span>
               </div>
@@ -483,14 +500,14 @@ const Home = () => {
               </div>
               <div className="p-8 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <span className="material-symbols-outlined text-primary text-3xl">
+                  <span className="material-symbols-outlined text-primary text-3xl" translate="no">
                     location_on
                   </span>
                   <h4 className="text-2xl font-black text-navy">
                     Boynton Beach
                   </h4>
                 </div>
-                <span className="material-icons text-primary/30 group-hover:text-primary transition-colors">
+                <span className="material-icons text-primary/30 group-hover:text-primary transition-colors" translate="no">
                   arrow_outward
                 </span>
               </div>
@@ -521,10 +538,10 @@ const Home = () => {
               {...fadeUp}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8">
+              <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8" translate="no">
                 format_quote
               </span>
-              <div className="flex text-yellow-400 mb-6">
+              <div className="flex text-yellow-400 mb-6" translate="no">
                 <span className="material-icons">star</span>
                 <span className="material-icons">star</span>
                 <span className="material-icons">star</span>
@@ -546,10 +563,10 @@ const Home = () => {
               {...fadeUp}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8">
+              <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8" translate="no">
                 format_quote
               </span>
-              <div className="flex text-yellow-400 mb-6">
+              <div className="flex text-yellow-400 mb-6" translate="no">
                 <span className="material-icons">star</span>
                 <span className="material-icons">star</span>
                 <span className="material-icons">star</span>
@@ -571,10 +588,10 @@ const Home = () => {
               {...fadeUp}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8">
+              <span className="material-icons text-primary/10 text-6xl absolute top-6 right-8" translate="no">
                 format_quote
               </span>
-              <div className="flex text-yellow-400 mb-6">
+              <div className="flex text-yellow-400 mb-6" translate="no">
                 <span className="material-icons">star</span>
                 <span className="material-icons">star</span>
                 <span className="material-icons">star</span>
@@ -626,7 +643,7 @@ const Home = () => {
                 <summary className="flex justify-between items-center font-bold cursor-pointer list-none text-xl text-navy">
                   What does a deep cleaning include?
                   <span className="bg-sky-pale text-primary p-2 rounded-full transition-transform duration-300 group-open:rotate-180">
-                    <span className="material-symbols-outlined">
+                    <span className="material-symbols-outlined" translate="no">
                       expand_more
                     </span>
                   </span>
@@ -643,7 +660,7 @@ const Home = () => {
                 <summary className="flex justify-between items-center font-bold cursor-pointer list-none text-xl text-navy">
                   How can I book my service?
                   <span className="bg-sky-pale text-primary p-2 rounded-full transition-transform duration-300 group-open:rotate-180">
-                    <span className="material-symbols-outlined">
+                    <span className="material-symbols-outlined" translate="no">
                       expand_more
                     </span>
                   </span>
@@ -659,7 +676,7 @@ const Home = () => {
                 <summary className="flex justify-between items-center font-bold cursor-pointer list-none text-xl text-navy">
                   Do I need to be home during the cleaning?
                   <span className="bg-sky-pale text-primary p-2 rounded-full transition-transform duration-300 group-open:rotate-180">
-                    <span className="material-symbols-outlined">
+                    <span className="material-symbols-outlined" translate="no">
                       expand_more
                     </span>
                   </span>
@@ -676,7 +693,7 @@ const Home = () => {
                 <summary className="flex justify-between items-center font-bold cursor-pointer list-none text-xl text-navy">
                   What cleaning products do you use?
                   <span className="bg-sky-pale text-primary p-2 rounded-full transition-transform duration-300 group-open:rotate-180">
-                    <span className="material-symbols-outlined">
+                    <span className="material-symbols-outlined" translate="no">
                       expand_more
                     </span>
                   </span>

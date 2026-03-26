@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project specific
+*.zip
+test.txt
+test_ssh.exp
+*.php.bak
+.DS_Store

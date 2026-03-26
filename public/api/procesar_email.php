@@ -135,9 +135,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $message .= "Content-Type: application/pdf; name=\"Angels_Cleaning_Quote.pdf\"\r\n";
     $message .= "Content-Transfer-Encoding: base64\r\n";
     $message .= "Content-Disposition: attachment; filename=\"Angels_Cleaning_Quote.pdf\"\r\n\r\n";
-
-    // Insertar el base64 respetando los saltos de línea requeridos por el estándar MIME
     $message .= chunk_split($pdfBase64) . "\r\n\r\n";
+
+    // Adjuntar Imágenes de Referencia (si existen)
+    $images = $data["referenceImages"] ?? [];
+    if (!empty($images) && is_array($images)) {
+        foreach ($images as $index => $base64Image) {
+            // Extraer el tipo de MIME y los datos de base64 del URI (ej: data:image/png;base64,iVBOR...)
+            if (preg_match('/^data:image\/(\w+);base64,(.*)$/', $base64Image, $matches)) {
+                $ext = $matches[1];
+                $imageData = $matches[2];
+                $imageName = "reference_image_" . ($index + 1) . ".$ext";
+
+                $message .= "--$boundary\r\n";
+                $message .= "Content-Type: image/$ext; name=\"$imageName\"\r\n";
+                $message .= "Content-Transfer-Encoding: base64\r\n";
+                $message .= "Content-Disposition: attachment; filename=\"$imageName\"\r\n\r\n";
+                $message .= chunk_split($imageData) . "\r\n\r\n";
+            }
+        }
+    }
+
     $message .= "--$boundary--";
 
   } else {

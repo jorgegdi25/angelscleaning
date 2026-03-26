@@ -60,14 +60,14 @@ const About = () => {
                     <div className="grid md:grid-cols-2 gap-10">
                         <motion.div className="bg-white p-10 rounded-3xl shadow-xl hover:-translate-y-2 transition-transform" {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }}>
                             <div className="w-14 h-14 bg-sky-pale text-primary rounded-2xl flex items-center justify-center mb-6">
-                                <span className="material-icons text-3xl">flag</span>
+                                <span className="material-icons text-3xl" translate="no">flag</span>
                             </div>
                             <h4 className="text-2xl font-bold text-navy mb-4">Our Mission</h4>
                             <p className="text-charcoal/70 leading-relaxed">Our mission is to always fulfill the promises made to our clients, making property cleaning a worry-free experience. We focus on delivering reliable, detailed, and professional results, whether for houses, apartments, or transitional properties, providing peace of mind and satisfaction with every service.</p>
                         </motion.div>
                         <motion.div className="bg-white p-10 rounded-3xl shadow-xl hover:-translate-y-2 transition-transform" {...fadeUp} transition={{ duration: 0.6, delay: 0.3 }}>
                             <div className="w-14 h-14 bg-sky-pale text-primary rounded-2xl flex items-center justify-center mb-6">
-                                <span className="material-icons text-3xl">visibility</span>
+                                <span className="material-icons text-3xl" translate="no">visibility</span>
                             </div>
                             <h4 className="text-2xl font-bold text-navy mb-4">Our Vision</h4>
                             <p className="text-charcoal/70 leading-relaxed">To be the most trusted and recognized residential, recurring, and transitional property cleaning company in Delray Beach and Boca Raton, known for deep cleaning, recurring residential cleaning, move-in and move-out cleaning, and reliable services that deliver spotless results and peace of mind for every client.</p>
@@ -85,22 +85,22 @@ const About = () => {
                     </motion.div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         <motion.div className="p-6" {...fadeUp} transition={{ duration: 0.5, delay: 0.1 }}>
-                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl">handshake</span></div>
+                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl" translate="no">handshake</span></div>
                             <h4 className="text-xl font-bold text-navy mb-2">Commitment</h4>
                             <p className="text-charcoal/70 text-sm">Always fulfilling the promises made for residential, tenant, and transitional property cleaning.</p>
                         </motion.div>
                         <motion.div className="p-6" {...fadeUp} transition={{ duration: 0.5, delay: 0.2 }}>
-                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl">workspace_premium</span></div>
+                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl" translate="no">workspace_premium</span></div>
                             <h4 className="text-xl font-bold text-navy mb-2">Quality</h4>
                             <p className="text-charcoal/70 text-sm">Delivering deep cleaning and detailed maintenance, as well as recurring services.</p>
                         </motion.div>
                         <motion.div className="p-6" {...fadeUp} transition={{ duration: 0.5, delay: 0.3 }}>
-                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl">verified_user</span></div>
+                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl" translate="no">verified_user</span></div>
                             <h4 className="text-xl font-bold text-navy mb-2">Trust</h4>
                             <p className="text-charcoal/70 text-sm">A professional, insured, and respectful team providing reliable cleaning services.</p>
                         </motion.div>
                         <motion.div className="p-6" {...fadeUp} transition={{ duration: 0.5, delay: 0.4 }}>
-                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl">health_and_safety</span></div>
+                            <div className="w-16 h-16 mx-auto bg-sky-light text-primary rounded-full flex items-center justify-center mb-4"><span className="material-icons text-3xl" translate="no">health_and_safety</span></div>
                             <h4 className="text-xl font-bold text-navy mb-2">Safety</h4>
                             <p className="text-charcoal/70 text-sm">Following professional safety standards (OSHA guidelines) with full insurance coverage.</p>
                         </motion.div>

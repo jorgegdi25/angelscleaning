@@ -48,7 +48,7 @@ const Contact = () => {
                             <div className="space-y-10">
                                 <div className="flex items-start">
                                     <div className="w-14 h-14 rounded-2xl bg-sky-pale flex items-center justify-center text-primary flex-shrink-0 mr-6 shadow-sm">
-                                        <span className="material-icons text-3xl">phone</span>
+                                        <span className="material-icons text-3xl" translate="no">phone</span>
                                     </div>
                                     <div>
                                         <h4 className="text-lg font-bold text-navy mb-1">Call Our Office</h4>
@@ -59,7 +59,7 @@ const Contact = () => {
 
                                 <div className="flex items-start">
                                     <div className="w-14 h-14 rounded-2xl bg-sky-pale flex items-center justify-center text-primary flex-shrink-0 mr-6 shadow-sm">
-                                        <span className="material-icons text-3xl">email</span>
+                                        <span className="material-icons text-3xl" translate="no">email</span>
                                     </div>
                                     <div>
                                         <h4 className="text-lg font-bold text-navy mb-1">Send an Email</h4>
@@ -70,7 +70,7 @@ const Contact = () => {
 
                                 <div className="flex items-start">
                                     <div className="w-14 h-14 rounded-2xl bg-sky-pale flex items-center justify-center text-primary flex-shrink-0 mr-6 shadow-sm">
-                                        <span className="material-icons text-3xl">location_on</span>
+                                        <span className="material-icons text-3xl" translate="no">location_on</span>
                                     </div>
                                     <div>
                                         <h4 className="text-lg font-bold text-navy mb-1">Our Service Area</h4>
@@ -93,7 +93,7 @@ const Contact = () => {
                             transition={{ delay: 0.2 }}
                         >
                             <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <span className="material-icons text-9xl text-white">calculate</span>
+                                <span className="material-icons text-9xl text-white" translate="no">calculate</span>
                             </div>
                             
                             <h2 className="text-3xl md:text-4xl font-black text-white mb-6 relative z-10">
@@ -107,7 +107,7 @@ const Contact = () => {
                                 to="/quote"
                                 className="inline-flex items-center justify-center px-10 py-5 bg-primary text-white font-black text-xl rounded-2xl shadow-2xl shadow-primary/40 hover:bg-white hover:text-primary hover:-translate-y-2 transition-all duration-300 relative z-10"
                             >
-                                <span className="material-icons mr-3">receipt_long</span>
+                                <span className="material-icons mr-3" translate="no">receipt_long</span>
                                 GET MY INSTANT QUOTE
                             </Link>
 
