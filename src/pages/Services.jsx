@@ -45,7 +45,7 @@ const Services = () => {
                             <ul className="space-y-2 mb-8 text-charcoal/70 list-disc pl-5">
                                 <li>Kitchens: surfaces, countertops, sinks, and exterior appliances.</li>
                                 <li>Bathrooms: disinfecting toilets, sinks, showers, and bathtubs.</li>
-                                <li>Floors: sweeping, mopping, and polishing according to surface type.</li>
+                                <li>Floors: sweeping, mopping.</li>
                                 <li>Dusting and details: furniture, shelves, baseboards, and accessible windows.</li>
                             </ul>
                             <Link to="/contact" className="inline-flex justify-center items-center bg-primary text-white hover:bg-[#0096b4] px-8 py-3 rounded-full text-base font-bold shadow-lg shadow-primary/30 transition-transform hover:-translate-y-1">Request Quote</Link>
@@ -107,7 +107,7 @@ const Services = () => {
                             <h4 className="font-bold text-primary mb-3">Includes:</h4>
                             <ul className="space-y-2 mb-8 text-charcoal/70 list-disc pl-5">
                                 <li>Deep and thorough cleaning of all accessible areas.</li>
-                                <li>Removal of stains, accumulated dust, and post-move or minor construction debris.</li>
+                                <li>Removal of stains, accumulated dust.</li>
                                 <li>Preparing the property for showings to buyers or new tenants.</li>
                             </ul>
                             <Link to="/contact" className="inline-flex justify-center items-center bg-primary text-white hover:bg-[#0096b4] px-8 py-3 rounded-full text-base font-bold shadow-lg shadow-primary/30 transition-transform hover:-translate-y-1">Request Quote</Link>
