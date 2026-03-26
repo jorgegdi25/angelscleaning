@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import logoUrl from '/logo-angels-c.png';
+import pdfLogoUrl from '/logo-angels-pdf.png';
 
 const serviceDetails = {
     'Standard Cleaning': {
@@ -300,10 +301,9 @@ const QuoteCalculator = () => {
         const doc = new jsPDF();
         
         try {
-            // Draw logo onto a canvas with white background to fix jsPDF transparency issue
+            // Use the non-transparent version of the logo for PDF
             const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.src = logoUrl;
+            img.src = pdfLogoUrl;
             
             await new Promise((resolve) => {
                 img.onload = resolve;
@@ -311,20 +311,10 @@ const QuoteCalculator = () => {
             });
             
             if (img.complete && img.naturalWidth > 0) {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
-                const ctx = canvas.getContext('2d');
-                // Fill with white background so transparency doesn't become black
-                ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-
-                const pdfWidth = 45;
+                const pdfWidth = 40;
                 const aspectRatio = img.naturalHeight / img.naturalWidth;
                 const pdfHeight = pdfWidth * aspectRatio;
-                doc.addImage(dataUrl, 'JPEG', 14, 10, pdfWidth, pdfHeight);
+                doc.addImage(img, 'PNG', 14, 10, pdfWidth, pdfHeight);
             }
         } catch (e) {
             console.error("Could not load logo for PDF", e);
