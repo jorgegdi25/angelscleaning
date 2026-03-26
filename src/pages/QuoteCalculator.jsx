@@ -461,6 +461,7 @@ const QuoteCalculator = () => {
 
             if (response.ok) {
                 setSubmitStatus('success');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 setSubmitStatus('error');
             }
@@ -743,7 +744,7 @@ const QuoteCalculator = () => {
                                                                     <p className="text-[10px] text-charcoal/60 mt-1">4 included, +$20 per extra</p>
                                                                 </div>
                                                                 <div className="md:col-span-1">
-                                                                    <label className="block text-sm font-bold text-charcoal mb-2">Full Bathrooms</label>
+                                                                    <label className="block text-sm font-bold text-charcoal mb-2">Full Bathrooms <span className="text-charcoal/50 font-normal">(with shower/tub)</span></label>
                                                                     <div className="flex bg-white border border-sky-pale rounded-xl overflow-hidden">
                                                                         <button type="button" onClick={() => setForm(p=>({...p, fullBathrooms: Math.max(0, p.fullBathrooms-1)}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">-</button>
                                                                         <div className="flex-1 flex items-center justify-center font-bold text-navy text-lg">{form.fullBathrooms}</div>
@@ -752,7 +753,7 @@ const QuoteCalculator = () => {
                                                                     <p className="text-[10px] text-charcoal/60 mt-1">Full = 1.0 Unit ($20 extra)</p>
                                                                 </div>
                                                                 <div>
-                                                                    <label className="block text-sm font-bold text-charcoal mb-2">Half Bathrooms</label>
+                                                                    <label className="block text-sm font-bold text-charcoal mb-2">Half Bathrooms <span className="text-charcoal/50 font-normal">(without shower/tub)</span></label>
                                                                     <div className="flex bg-white border border-sky-pale rounded-xl overflow-hidden">
                                                                         <button type="button" onClick={() => setForm(p=>({...p, halfBathrooms: Math.max(0, p.halfBathrooms-1)}))} className="w-12 h-12 bg-sky-pale text-primary font-bold text-xl hover:bg-primary hover:text-white transition-colors">-</button>
                                                                         <div className="flex-1 flex items-center justify-center font-bold text-navy text-lg">{form.halfBathrooms}</div>
@@ -916,8 +917,8 @@ const QuoteCalculator = () => {
                                                             
                                                             {/* Image Upload */}
                                                             <div className="md:col-span-2 bg-sky-pale/20 border-2 border-dashed border-sky-pale rounded-xl p-6 text-center">
-                                                                <h4 className="font-bold text-navy mb-2">Attach Reference Images (Optional)</h4>
-                                                                <p className="text-xs text-charcoal/70 mb-4">Max 2 images (e.g. current condition of specific areas). Limit 5MB per image.</p>
+                                                                <h4 className="font-bold text-navy mb-2">Attach Photos (Optional)</h4>
+                                                                <p className="text-xs text-charcoal/70 mb-4">Upload photos of the areas you'd like us to focus on or any special requirements. Max 2 images, 5MB each.</p>
                                                                 
                                                                 <div className="flex flex-col items-center justify-center">
                                                                     {form.referenceImages.length < 2 && (
