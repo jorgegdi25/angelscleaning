@@ -1005,6 +1005,10 @@ const QuoteCalculator = () => {
                                                                     I have read and I accept the Quality Policy.
                                                                 </span>
                                                             </label>
+                                                            <p className="text-xs text-charcoal/60 mt-3">
+                                                                By submitting this form, you agree to our{' '}
+                                                                <a href="https://angelscleaningservices.com/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-navy font-bold">Privacy Policy</a>.
+                                                            </p>
                                                         </div>
                                                     </div>
 
