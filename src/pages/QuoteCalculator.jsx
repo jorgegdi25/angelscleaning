@@ -300,20 +300,31 @@ const QuoteCalculator = () => {
         const doc = new jsPDF();
         
         try {
-            // Ensure logo is loaded before adding it to PDF to avoid black background issues
+            // Draw logo onto a canvas with white background to fix jsPDF transparency issue
             const img = new Image();
+            img.crossOrigin = 'anonymous';
             img.src = logoUrl;
             
             await new Promise((resolve) => {
                 img.onload = resolve;
-                img.onerror = resolve; // Continue even if load fails to avoid blocking the whole process
+                img.onerror = resolve;
             });
             
             if (img.complete && img.naturalWidth > 0) {
-                const imgWidth = 45;
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                const ctx = canvas.getContext('2d');
+                // Fill with white background so transparency doesn't become black
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+
+                const pdfWidth = 45;
                 const aspectRatio = img.naturalHeight / img.naturalWidth;
-                const imgHeight = imgWidth * aspectRatio;
-                doc.addImage(img, 'PNG', 14, 10, imgWidth, imgHeight, undefined, 'FAST');
+                const pdfHeight = pdfWidth * aspectRatio;
+                doc.addImage(dataUrl, 'JPEG', 14, 10, pdfWidth, pdfHeight);
             }
         } catch (e) {
             console.error("Could not load logo for PDF", e);
