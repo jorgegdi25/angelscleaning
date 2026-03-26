@@ -135,7 +135,8 @@ const QuoteCalculator = () => {
         acceptTerms: false,
         acceptQualityPolicy: false,
         intent: 'quote',
-        isUrgent: false
+        isUrgent: false,
+        hasHadDeepClean: 'unsure' // 'yes', 'no', 'unsure'
     });
 
     const [hasInteracted, setHasInteracted] = useState(false);
@@ -150,7 +151,10 @@ const QuoteCalculator = () => {
     const totalSteps = 4;
 
     const nextStep = () => {
-        if (step === 1 && cityError) return;
+        if (step === 1) {
+            if (cityError) return;
+            if (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes') return;
+        }
         setStep(prev => Math.min(prev + 1, totalSteps));
         
         if (window.innerWidth < 1024) {
@@ -485,7 +489,8 @@ const QuoteCalculator = () => {
             referenceImages: [],
             acceptTerms: false,
             acceptQualityPolicy: false,
-            isUrgent: false
+            isUrgent: false,
+            hasHadDeepClean: 'unsure'
         });
         setStep(1);
         setSubmitStatus(null);
@@ -613,13 +618,60 @@ const QuoteCalculator = () => {
                                                                             initial={{ height: 0, opacity: 0 }}
                                                                             animate={{ height: 'auto', opacity: 1 }}
                                                                             exit={{ height: 0, opacity: 0 }}
-                                                                            className="mt-4 bg-primary/10 border border-primary/30 rounded-xl p-4 flex items-start space-x-3 overflow-hidden shadow-sm"
+                                                                            className="mt-4 space-y-4 overflow-hidden"
                                                                         >
-                                                                            <span className="material-symbols-outlined text-primary text-[20px] mt-0.5" translate="no">auto_awesome</span>
-                                                                            <p className="text-xs text-navy font-medium leading-relaxed">
-                                                                                <span className="font-black text-primary uppercase mr-1">Pro Tip:</span> 
-                                                                                Standard Cleaning is a maintenance service. If this is your first time with us or your home hasn't been professionally cleaned in the last 30 days, we highly recommend starting with a <span className="font-bold underline">Deep Cleaning</span> for the best results!
-                                                                            </p>
+                                                                            <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 shadow-sm">
+                                                                                <p className="text-sm font-bold text-navy mb-4">Have you had a Deep Cleaning with us in the last 30 days?</p>
+                                                                                <div className="flex gap-4">
+                                                                                    <button 
+                                                                                        type="button" 
+                                                                                        onClick={() => setForm(prev => ({ ...prev, hasHadDeepClean: 'yes' }))}
+                                                                                        className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all border-2 ${form.hasHadDeepClean === 'yes' ? 'bg-primary border-primary text-white' : 'bg-white border-sky-pale text-navy hover:border-primary/50'}`}
+                                                                                    >
+                                                                                        Yes, I have
+                                                                                    </button>
+                                                                                    <button 
+                                                                                        type="button" 
+                                                                                        onClick={() => setForm(prev => ({ ...prev, hasHadDeepClean: 'no' }))}
+                                                                                        className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all border-2 ${form.hasHadDeepClean === 'no' ? 'bg-primary border-primary text-white' : 'bg-white border-sky-pale text-navy hover:border-primary/50'}`}
+                                                                                    >
+                                                                                        No, first time
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            {form.hasHadDeepClean === 'no' && (
+                                                                                <motion.div 
+                                                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                                    className="bg-amber-50 border-2 border-amber-200 rounded-xl p-5 flex items-start space-x-3 shadow-md"
+                                                                                >
+                                                                                    <span className="material-symbols-outlined text-amber-500 text-[24px] mt-0.5" translate="no">warning</span>
+                                                                                    <div className="flex-1">
+                                                                                        <p className="text-sm text-amber-900 font-bold mb-3 leading-relaxed">
+                                                                                            To ensure our quality standards, an initial <span className="underline italic">Deep Cleaning</span> is required for first-time customers or homes not professionally cleaned recently.
+                                                                                        </p>
+                                                                                        <button 
+                                                                                            type="button"
+                                                                                            onClick={() => setForm(prev => ({ ...prev, serviceType: 'Deep Cleaning', hasHadDeepClean: 'unsure' }))}
+                                                                                            className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-black uppercase tracking-wider py-2.5 px-5 rounded-lg transition-all shadow-sm flex items-center"
+                                                                                        >
+                                                                                            Switch to Deep Cleaning <span className="material-symbols-outlined ml-2 text-sm" translate="no">auto_awesome</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </motion.div>
+                                                                            )}
+
+                                                                            {form.hasHadDeepClean === 'yes' && (
+                                                                                <motion.div 
+                                                                                    initial={{ opacity: 0 }}
+                                                                                    animate={{ opacity: 1 }}
+                                                                                    className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center space-x-3"
+                                                                                >
+                                                                                    <span className="material-symbols-outlined text-green-500 text-[20px]" translate="no">check_circle</span>
+                                                                                    <p className="text-xs text-green-800 font-medium">Great! Standard Cleaning is perfect for maintaining your home's sparkle.</p>
+                                                                                </motion.div>
+                                                                            )}
                                                                         </motion.div>
                                                                     )}
                                                                 </AnimatePresence>
@@ -640,7 +692,12 @@ const QuoteCalculator = () => {
                                                         </div>
                                                     </div>
 
-                                                    <button type="button" onClick={nextStep} disabled={!!cityError} className={`w-full text-white font-bold py-4 rounded-xl transition-all shadow-lg flex justify-center items-center text-lg mt-8 border-none outline-none ${cityError ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-[#0097DB] hover:bg-navy shadow-[#0097DB]/30 hover:-translate-y-1'}`}>
+                                                    <button 
+                                                        type="button" 
+                                                        onClick={nextStep} 
+                                                        disabled={!!cityError || (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes')} 
+                                                        className={`w-full text-white font-bold py-4 rounded-xl transition-all shadow-lg flex justify-center items-center text-lg mt-8 border-none outline-none ${!!cityError || (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes') ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-[#0097DB] hover:bg-navy shadow-[#0097DB]/30 hover:-translate-y-1'}`}
+                                                    >
                                                         Next Step <span className="material-symbols-outlined ml-2" translate="no">arrow_forward</span>
                                                     </button>
                                                 </motion.div>
