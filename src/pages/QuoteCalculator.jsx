@@ -129,7 +129,7 @@ const QuoteCalculator = () => {
         customerEmail: '',
         customerPhone: '',
         customerAddress: '',
-        city: 'Boca Raton',
+        city: '',
         message: '',
         referenceImages: [],
         acceptTerms: false,
@@ -152,7 +152,7 @@ const QuoteCalculator = () => {
 
     const nextStep = () => {
         if (step === 1) {
-            if (cityError) return;
+            if (cityError || !form.city) return;
             if (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes') return;
         }
         setStep(prev => Math.min(prev + 1, totalSteps));
@@ -487,7 +487,7 @@ const QuoteCalculator = () => {
             customerEmail: '',
             customerPhone: '',
             customerAddress: '',
-            city: 'Boca Raton',
+            city: '',
             message: '',
             referenceImages: [],
             acceptTerms: false,
@@ -585,6 +585,7 @@ const QuoteCalculator = () => {
                                                     <div className="bg-sky-pale/20 p-6 rounded-2xl border border-sky-light">
                                                         <label className="block text-sm font-bold text-navy mb-2">Service Area City</label>
                                                         <select name="city" value={form.city} onChange={handleInput} className={`${inputClasses} ${cityError ? 'border-red-500' : ''}`}>
+                                                            <option value="" disabled>Select City</option>
                                                             <option value="Boca Raton">Boca Raton</option>
                                                             <option value="Boynton Beach">Boynton Beach</option>
                                                             <option value="Delray Beach">Delray Beach</option>
@@ -698,8 +699,8 @@ const QuoteCalculator = () => {
                                                     <button 
                                                         type="button" 
                                                         onClick={nextStep} 
-                                                        disabled={!!cityError || (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes')} 
-                                                        className={`w-full text-white font-bold py-4 rounded-xl transition-all shadow-lg flex justify-center items-center text-lg mt-8 border-none outline-none ${!!cityError || (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes') ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-[#0097DB] hover:bg-navy shadow-[#0097DB]/30 hover:-translate-y-1'}`}
+                                                        disabled={!!cityError || !form.city || (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes')} 
+                                                        className={`w-full text-white font-bold py-4 rounded-xl transition-all shadow-lg flex justify-center items-center text-lg mt-8 border-none outline-none ${!!cityError || !form.city || (form.serviceType === 'Standard Cleaning' && form.hasHadDeepClean !== 'yes') ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-[#0097DB] hover:bg-navy shadow-[#0097DB]/30 hover:-translate-y-1'}`}
                                                     >
                                                         Next Step <span className="material-symbols-outlined ml-2" translate="no">arrow_forward</span>
                                                     </button>
