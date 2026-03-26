@@ -17,7 +17,7 @@ const Footer = () => {
                         </p>
                         <div className="flex space-x-4">
                             <a href="https://facebook.com/angelscleaning" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 rounded-full bg-sky-pale text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><FiFacebook className="text-xl" /></a>
-                            <a href="https://instagram.com/angelscleaning" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full bg-sky-pale text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><FiInstagram className="text-xl" /></a>
+                            <a href="https://www.instagram.com/angels_cleaningfl/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full bg-sky-pale text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><FiInstagram className="text-xl" /></a>
                         </div>
                     </div>
 
