@@ -32,7 +32,7 @@ const Services = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Service 1 */}
-                    <motion.div id="deep-cleaning" className="flex flex-col md:flex-row gap-12 items-center mb-24" {...fadeUp}>
+                    <motion.div id="deep-cleaning" className="flex flex-col md:flex-row gap-12 items-center mb-24 scroll-mt-24" {...fadeUp}>
                         <div className="w-full md:w-1/2">
                             <div className="rounded-3xl overflow-hidden shadow-2xl h-80">
                                 <img src="/images/deep-clean.png" alt="Deep Cleaning" loading="lazy" className="w-full h-full object-cover" />
@@ -53,7 +53,7 @@ const Services = () => {
                     </motion.div>
 
                     {/* Service 2 */}
-                    <motion.div id="recurring-cleaning" className="flex flex-col md:flex-row-reverse gap-12 items-center mb-24" {...fadeUp}>
+                    <motion.div id="recurring-cleaning" className="flex flex-col md:flex-row-reverse gap-12 items-center mb-24 scroll-mt-24" {...fadeUp}>
                         <div className="w-full md:w-1/2">
                             <div className="rounded-3xl overflow-hidden shadow-2xl h-80">
                                 <img src="/images/recurring-clean.png" alt="Recurring Cleaning" loading="lazy" className="w-full h-full object-cover" />
@@ -73,7 +73,7 @@ const Services = () => {
                     </motion.div>
 
                     {/* Service 3 */}
-                    <motion.div id="move-in-out" className="flex flex-col md:flex-row gap-12 items-center mb-24" {...fadeUp}>
+                    <motion.div id="move-in-out" className="flex flex-col md:flex-row gap-12 items-center mb-24 scroll-mt-24" {...fadeUp}>
                         <div className="w-full md:w-1/2">
                             <div className="rounded-3xl overflow-hidden shadow-2xl h-80">
                                 <img src="/images/move-in-out.png" alt="Move-in Cleaning" loading="lazy" className="w-full h-full object-cover" />
@@ -95,7 +95,7 @@ const Services = () => {
                     </motion.div>
 
                     {/* Service 4 */}
-                    <motion.div id="transitional" className="flex flex-col md:flex-row-reverse gap-12 items-center mb-16" {...fadeUp}>
+                    <motion.div id="transitional" className="flex flex-col md:flex-row-reverse gap-12 items-center mb-16 scroll-mt-24" {...fadeUp}>
                         <div className="w-full md:w-1/2">
                             <div className="rounded-3xl overflow-hidden shadow-2xl h-80">
                                 <img src="/images/transitional.png" alt="Transitional Cleaning" loading="lazy" className="w-full h-full object-cover" />
@@ -118,7 +118,7 @@ const Services = () => {
             </section>
 
             {/* Specialized */}
-            <section className="py-20 bg-sky-pale">
+            <section id="specialized" className="py-20 bg-sky-pale scroll-mt-24">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div className="bg-white rounded-[2.5rem] p-10 md:p-16 shadow-xl border border-white" {...fadeUp}>
                         <h2 className="text-3xl font-bold text-navy mb-10 text-center">5. Specialized & Customizable Services</h2>

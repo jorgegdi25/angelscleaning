@@ -35,12 +35,15 @@ const Footer = () => {
 
                     {/* Services */}
                     <div>
-                        <h4 className="text-navy font-bold mb-6 text-lg">Our Services</h4>
+                        <h4 className="text-navy font-bold mb-6 text-lg">
+                            <Link to="/services" className="hover:text-primary transition-colors">Our Services</Link>
+                        </h4>
                         <ul className="space-y-4">
                             <li><Link to="/services#deep-cleaning" className="hover:text-primary transition-colors">Deep Cleaning</Link></li>
                             <li><Link to="/services#recurring-cleaning" className="hover:text-primary transition-colors">Recurring Residential</Link></li>
                             <li><Link to="/services#move-in-out" className="hover:text-primary transition-colors">Move-in / Move-out</Link></li>
                             <li><Link to="/services#transitional" className="hover:text-primary transition-colors">Transitional Property</Link></li>
+                            <li><Link to="/services#specialized" className="hover:text-primary transition-colors">Specialized Services</Link></li>
                         </ul>
                     </div>
 
