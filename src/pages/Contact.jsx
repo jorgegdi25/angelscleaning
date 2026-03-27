@@ -51,8 +51,8 @@ const Contact = () => {
                                         <span className="material-icons text-3xl" translate="no">phone</span>
                                     </div>
                                     <div>
-                                        <h4 className="text-lg font-bold text-navy mb-1">Call Our Office</h4>
-                                        <a href="tel:+15615550198" className="text-xl text-charcoal/80 hover:text-primary transition-colors font-medium">+1 (561) 555-0198</a>
+                                        <h4 className="text-lg font-bold text-navy mb-1">SMS Our Office</h4>
+                                        <a href="sms:+15616649611" className="text-xl text-charcoal/80 hover:text-primary transition-colors font-medium">+1 (561) 664-9611</a>
                                         <p className="text-base text-charcoal/60 mt-2 italic">Available Mon-Sat, 8am - 6pm</p>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h4 className="text-lg font-bold text-navy mb-1">Send an Email</h4>
-                                        <a href="mailto:info@angelscleanservices.com" className="text-xl text-charcoal/80 hover:text-primary transition-colors font-medium">info@angelscleanservices.com</a>
+                                        <a href="mailto:info@angelscleaningservices.com" className="text-xl text-charcoal/80 hover:text-primary transition-colors font-medium">info@angelscleaningservices.com</a>
                                         <p className="text-base text-charcoal/60 mt-2 italic">We respond within 24 hours</p>
                                     </div>
                                 </div>
