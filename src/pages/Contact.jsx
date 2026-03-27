@@ -48,7 +48,7 @@ const Contact = () => {
                             <div className="space-y-10">
                                 <div className="flex items-start">
                                     <div className="w-14 h-14 rounded-2xl bg-sky-pale flex items-center justify-center text-primary flex-shrink-0 mr-6 shadow-sm">
-                                        <span className="material-icons text-3xl" translate="no">phone</span>
+                                        <span className="material-icons text-3xl" translate="no">sms</span>
                                     </div>
                                     <div>
                                         <h4 className="text-lg font-bold text-navy mb-1">SMS Our Office</h4>

@@ -76,7 +76,7 @@ const serviceDetails = {
     },
     'Commercial Cleaning - Standard': {
         included: [
-            { area: 'Common Areas', tasks: '• Dusting desks, tables, accessible furniture\n• Cleaning interior mirrors and glass surfaces\n• Disinfecting light switches and door handles\n• Light dusting of ceiling fans\n• Sweeping, vacuuming, & mopping floors\n• Emptying trash bins' },
+            { area: 'Common Areas', tasks: '• Dusting desks, tables, accessible furniture\n• Cleaning interior mirrors and glass surfaces\n• Cleaning and disinfecting light switches and door handles\n• Light dusting of ceiling fans\n• Sweeping, vacuuming, & mopping floors\n• Emptying trash bins' },
             { area: 'Reception', tasks: '• Cleaning furniture and surfaces\n• Cleaning counters and reception desks\n• Cleaning coffee tables' },
             { area: 'Offices', tasks: '• Cleaning desks and worktables\n• Dusting furniture tops\n• Vacuuming carpets & rugs\n• Sweeping and mopping floors' },
             { area: 'Bathrooms/Kitchen', tasks: '• Disinfecting sinks, countertops, & toilets\n• Sweeping and mopping floors\n• Restocking soap and paper towels (if applicable)\n• Emptying trash' }
@@ -388,9 +388,21 @@ const QuoteCalculator = () => {
 
         // Add requested extras as Included
         let requestedExtras = [];
+        
+        // Define which extras are already included in specific services to avoid redundancy in the PDF
+        const alreadyIncludedMap = {
+            'Move Out/ Move in Cleaning': ['oven', 'fridge', 'cabinets', 'baseboards'],
+            // Add other services here if they include extras by default
+        };
+
+        const currentServiceIncludedExtras = alreadyIncludedMap[form.serviceType] || [];
+
         form.extras.forEach(extraId => {
-            const extraInfo = extrasList.find(e => e.id === extraId);
-            if(extraInfo) requestedExtras.push(`• ${extraInfo.label.split(' ($')[0]}`);
+            // Only add to PDF "Added Extras" if it was selected AND not part of the standard service inclusions
+            if (!currentServiceIncludedExtras.includes(extraId)) {
+                const extraInfo = extrasList.find(e => e.id === extraId);
+                if(extraInfo) requestedExtras.push(`• ${extraInfo.label.split(' ($')[0]}`);
+            }
         });
         if (form.windowsCount > 0) {
             requestedExtras.push(`• Interior/Exterior Windows (${form.windowsCount})`);

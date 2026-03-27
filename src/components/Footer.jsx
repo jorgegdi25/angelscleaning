@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiFacebook, FiInstagram, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
+import { FiFacebook, FiInstagram, FiMail, FiMessageSquare, FiMapPin } from 'react-icons/fi';
 
 const Footer = () => {
     return (
@@ -56,8 +56,8 @@ const Footer = () => {
                                 <span>Delray Beach and Boca Raton</span>
                             </li>
                             <li className="flex items-center">
-                                <FiPhone className="text-primary mr-3 flex-shrink-0 text-lg" />
-                                <a href="sms:+15616649611" className="hover:text-primary transition-colors">+1 (561) 664-9611</a>
+                                <FiMessageSquare className="text-primary mr-3 flex-shrink-0 text-lg" />
+                                <a href="sms:+15616649611" className="hover:text-primary transition-colors font-bold">SMS: +1 (561) 664-9611</a>
                             </li>
                             <li className="flex items-center">
                                 <FiMail className="text-primary mr-3 flex-shrink-0 text-lg" />
