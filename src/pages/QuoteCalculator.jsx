@@ -57,10 +57,11 @@ const serviceDetails = {
         ]
     },
     'Move Out/ Move in Cleaning': {
+        description: 'Recommended for homes or apartments that are being vacated and need a thorough cleaning to leave the property ready for the next tenant or owner.\n\nIncludes all Deep Cleaning tasks plus the following additional tasks:',
         included: [
-            { area: 'Common Areas & Bedrooms', tasks: '• Deep cleaning of closets and cabinets inside\n• Cleaning interior of drawers and shelves\n• Detailed cleaning of doors and frames\n• Cleaning interior of windows\n• Cleaning blinds\n• Deep cleaning baseboards & ceiling fans' },
-            { area: 'Kitchen', tasks: '• Cleaning inside cabinets and drawers\n• Cleaning inside refrigerator\n• Cleaning inside oven & microwave\n• Detailed cleaning of stovetop and burners\n• Deep cleaning of backsplash\n• Removal of grease buildup' },
-            { area: 'Bathrooms', tasks: '• Deep cleaning of tiles and grout\n• Removal of soap scum/hard water stains\n• Deep cleaning of shower glass doors\n• Cleaning behind and around the toilet\n• Cleaning sinks, countertops, & faucets\n• Cleaning bathroom accessories' },
+            { area: 'Common Areas & Bedrooms', tasks: '• Deep cleaning of closets and cabinets inside\n• Cleaning interior of drawers and shelves\n• Detailed cleaning of doors and door frames\n• Cleaning interior of windows\n• Cleaning blinds\n• Deep cleaning of baseboards\n• Detailed cleaning of ceiling fans' },
+            { area: 'Kitchen', tasks: '• Cleaning inside cabinets and drawers\n• Cleaning inside the refrigerator\n• Cleaning inside the oven\n• Cleaning inside the microwave\n• Detailed cleaning of stovetop and burners\n• Deep cleaning of backsplash\n• Cleaning and disinfecting sink and faucet\n• Removal of grease buildup from all surfaces' },
+            { area: 'Bathrooms', tasks: '• Deep cleaning of tiles and grout\n• Removal of soap scum and hard water stains\n• Deep cleaning of shower glass doors\n• Cleaning behind and around the toilet\n• Cleaning sinks, countertops, and faucets\n• Cleaning bathroom accessories and shelves' },
             { area: 'Floors & General', tasks: '• Sweeping, vacuuming, and mopping all floors\n• Emptying trash bins' }
         ],
         notIncluded: [
@@ -70,7 +71,8 @@ const serviceDetails = {
             { id: 'patio', text: '• Cleaning outdoor areas (yard/patio)' },
             { id: 'garage', text: '• Garage cleaning' },
             { id: 'biohazard', text: '• Severe mold or biohazard cleaning' }
-        ]
+        ],
+        specialNote: 'Recommended for properties that require a clean and presentable condition. Additional services may apply depending on the property’s condition.'
     },
     'Commercial Cleaning - Standard': {
         included: [
@@ -1165,16 +1167,27 @@ const QuoteCalculator = () => {
 
                             {/* Modal Body */}
                             <div className="p-5 sm:p-6 overflow-y-auto bg-gray-50/50 flex-1 relative">
+                                {serviceDetails[form.serviceType]?.description && (
+                                    <div className="mb-6 p-4 bg-primary/5 border-l-4 border-primary rounded-r-xl">
+                                        <p className="text-sm text-navy font-bold leading-relaxed whitespace-pre-line">
+                                            {serviceDetails[form.serviceType].description}
+                                        </p>
+                                    </div>
+                                )}
+
                                 <div className="mb-6 bg-green-50/50 border border-green-200 rounded-2xl p-5 pb-6">
                                     <h3 className="text-lg font-bold text-green-800 flex items-center mb-4 border-b border-green-200 pb-2">
-                                        <span className="material-symbols-outlined mr-2" translate="no">check_circle</span>
+                                        <span className="material-symbols-outlined mr-2" translate="no">verified</span>
                                         What's Included
                                     </h3>
-                                    <div className="space-y-5">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                                         {(serviceDetails[form.serviceType] || serviceDetails['Standard Cleaning']).included.map((inc, i) => (
-                                            <div key={i}>
-                                                <h4 className="font-bold text-navy text-sm mb-1">{inc.area}</h4>
-                                                <div className="text-sm text-charcoal whitespace-pre-line pl-2 leading-relaxed">
+                                            <div key={i} className="flex flex-col">
+                                                <h4 className="font-bold text-navy text-xs uppercase tracking-wider mb-2 flex items-center">
+                                                    <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span>
+                                                    {inc.area}
+                                                </h4>
+                                                <div className="text-sm text-charcoal whitespace-pre-line pl-3.5 leading-relaxed border-l border-sky-pale">
                                                     {inc.tasks}
                                                 </div>
                                             </div>
@@ -1182,19 +1195,35 @@ const QuoteCalculator = () => {
                                     </div>
                                 </div>
 
-                                <div className="bg-red-50/50 border border-red-200 rounded-2xl p-5 mb-4">
+                                <div className="bg-red-50/50 border border-red-200 rounded-2xl p-5 mb-6">
                                     <h3 className="text-lg font-bold text-red-800 flex items-center mb-4 border-b border-red-200 pb-2">
-                                        <span className="material-symbols-outlined mr-2" translate="no">cancel</span>
+                                        <span className="material-symbols-outlined mr-2" translate="no">block</span>
                                         Not Included
                                     </h3>
-                                    <div className="text-sm text-charcoal whitespace-pre-line pl-2 leading-relaxed">
-                                        {(serviceDetails[form.serviceType] || serviceDetails['Standard Cleaning']).notIncluded.map(n => n.text).join('\n')}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-charcoal pl-2 leading-relaxed">
+                                        {(serviceDetails[form.serviceType] || serviceDetails['Standard Cleaning']).notIncluded.map((n, i) => (
+                                            <div key={i} className="flex items-start">
+                                                <span className="text-red-400 mr-2 font-bold">×</span>
+                                                {n.text.replace('• ', '')}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                                 
-                                <div className="mt-8 text-center text-xs text-charcoal/60 px-4">
-                                    <p>💡 Note: Additional services may apply depending on the property's actual condition upon arrival.</p>
-                                </div>
+                                {serviceDetails[form.serviceType]?.specialNote ? (
+                                    <div className="mt-4 p-5 bg-amber-50 border-2 border-amber-200 rounded-2xl shadow-sm">
+                                        <div className="flex items-start space-x-3">
+                                            <span className="material-symbols-outlined text-amber-500 text-[24px]" translate="no">lightbulb</span>
+                                            <p className="text-sm text-amber-900 font-bold leading-relaxed italic">
+                                                {serviceDetails[form.serviceType].specialNote}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="mt-8 text-center text-xs text-charcoal/60 px-4">
+                                        <p>💡 Note: Additional services may apply depending on the property's actual condition upon arrival.</p>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     </div>
